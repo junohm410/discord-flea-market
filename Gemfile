@@ -70,3 +70,8 @@ group :development do
   gem 'rubocop-rspec', require: false
   gem 'slim_lint', require: false
 end
+
+group :test do
+  gem 'capybara'
+  gem 'selenium-webdriver'
+end
