@@ -1,22 +1,29 @@
 div id="#{dom_id item}"
-  p
-    strong Name:
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Name:
     = item.name
-  p
-    strong Description:
-    = item.description
-  p
-    strong Price:
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Price:
     = item.price
-  p
-    strong Shipping cost covered:
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Description:
+    = item.description
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Shipping cost covered:
     = item.shipping_cost_covered
-  p
-    strong Payment method:
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Payment method:
     = item.payment_method
-  p
-    strong Deadline:
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Deadline:
     = item.deadline
-  p
-    strong User:
+  p.my-5
+    strong.block.font-medium.mb-1
+      | User:
     = item.user.name
