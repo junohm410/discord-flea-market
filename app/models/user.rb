@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  has_many :items, dependent: :destroy
+
   devise :omniauthable, omniauth_providers: [:discord]
 
   validates :name, presence: true

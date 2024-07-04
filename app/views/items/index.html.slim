@@ -1,5 +1,9 @@
-h1 Items#index
-p Find me in app/views/items/index.html.slim
+h1 Items
 
-= button_to destroy_user_session_path, method: :delete, class: 'bg-cyan-100 p-2 rounded'
-  | ログアウト
+#items
+  - @items.each do |item|
+    = render item
+    p
+      = link_to 'Show this item', item
+
+= link_to 'New item', new_item_path
