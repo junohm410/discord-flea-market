@@ -1,0 +1,30 @@
+= form_with(model: item, class: 'contents') do |form|
+  - if item.errors.any?
+    #error_explanation.bg-red-50.text-red-500.px-3.py-2.font-medium.rounded-lg.mt-3
+      h2
+        = pluralize(item.errors.count, 'error')
+        |  prohibited this item from being saved:
+      ul
+        - item.errors.each do |error|
+          li
+            = error.full_message
+  .my-5
+    = form.label :name
+    = form.text_field :name, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :price
+    = form.number_field :price, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :description
+    = form.text_area :description, rows: 4, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :shipping_cost_covered
+    = form.check_box :shipping_cost_covered, class: 'block mt-2 h-5 w-5'
+  .my-5
+    = form.label :payment_method
+    = form.text_field :payment_method, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :deadline
+    = form.datetime_field :deadline, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .inline
+    = form.submit class: 'rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer'

@@ -1,0 +1,29 @@
+div id="#{dom_id item}"
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Name:
+    = item.name
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Price:
+    = item.price
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Description:
+    = item.description
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Shipping cost covered:
+    = item.shipping_cost_covered
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Payment method:
+    = item.payment_method
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Deadline:
+    = item.deadline
+  p.my-5
+    strong.block.font-medium.mb-1
+      | User:
+    = item.user.name
