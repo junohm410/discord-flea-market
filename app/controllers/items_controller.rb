@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show edit update destroy]
+  before_action :set_item, only: %i[edit update destroy]
 
   # GET /items
   def index
@@ -9,7 +9,9 @@ class ItemsController < ApplicationController
   end
 
   # GET /items/1
-  def show; end
+  def show
+    @item = Item.find(params[:id])
+  end
 
   # GET /items/new
   def new
@@ -49,7 +51,7 @@ class ItemsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_item
-    @item = Item.find(params[:id])
+    @item = current_user.items.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
