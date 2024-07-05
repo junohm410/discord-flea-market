@@ -2,6 +2,8 @@
 
 class User < ApplicationRecord
   has_many :items, dependent: :destroy
+  has_many :purchase_requests, dependent: :destroy
+  has_many :requested_items, through: :purchase_requests, source: :item
 
   devise :omniauthable, omniauth_providers: [:discord]
 

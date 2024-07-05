@@ -27,3 +27,7 @@ div id="#{dom_id item}"
     strong.block.font-medium.mb-1
       | User:
     = item.user.name
+  p.my-5
+    strong.block.font-medium.mb-1
+      | 現在の購入希望数:
+    = item.purchase_requests.size
