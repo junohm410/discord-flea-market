@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PurchaseRequestsController < ApplicationController
   def create
     item = Item.find(params[:item_id])
