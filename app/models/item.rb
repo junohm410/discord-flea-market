@@ -2,6 +2,8 @@
 
 class Item < ApplicationRecord
   belongs_to :user
+  has_many :purchase_requests, dependent: :destroy
+  has_many :requesting_users, through: :purchase_requests, source: :user
 
   validates :name, presence: true
   validates :description, presence: true
