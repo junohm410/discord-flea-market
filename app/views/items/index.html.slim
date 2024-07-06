@@ -2,10 +2,10 @@
   - if notice.present?
     p#notice.py-2.px-3.bg-green-50.mb-5.text-green-500.font-medium.rounded-lg.inline-block
       = notice
-  - content_for :title, 'Items'
+  - content_for :title, '商品一覧'
   .flex.justify-between.items-center
     h1.font-bold.text-4xl
-      | Items
+      | 現在出品されている商品一覧
     = link_to 'New item', new_item_path, class: 'rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium'
   #items.min-w-full
     - @items.each do |item|
