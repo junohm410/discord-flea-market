@@ -15,4 +15,12 @@ class Item < ApplicationRecord
 
   scope :listed, -> { where(status: :listed) }
   scope :accessible_for, ->(user) { where(user:).or(listed) }
+  scope :by_status, lambda { |status|
+    case status
+    when 'listed'
+      listed
+    when 'unpublished'
+      unpublished
+    end
+  }
 end

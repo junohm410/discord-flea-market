@@ -3,6 +3,10 @@
   .flex.justify-between.items-center
     h1.font-bold.text-4xl
       | 自分の商品一覧
+  .flex.items-center.mt-3
+    = link_to 'すべて', listed_items_path, class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to '出品中', listed_items_path(status: 'listed'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to '非公開', listed_items_path(status: 'unpublished'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
   #items.min-w-full
     - @items.each do |item|
       - case item.status
