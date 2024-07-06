@@ -13,8 +13,9 @@ html
     .flex.items-center.justify-between.px-5.py-3
       .text-3xl.font-bold.p-8
         | Fjord Flea Market
-      div
+      .flex.items-center
         - if user_signed_in?
+          = link_to '自分の商品一覧', listed_items_path, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
           = button_to destroy_user_session_path, method: :delete, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
             | ログアウト
     main.container.mx-auto.mt-28.px-5.flex
