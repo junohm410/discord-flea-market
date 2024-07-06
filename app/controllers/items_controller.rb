@@ -24,6 +24,7 @@ class ItemsController < ApplicationController
   # POST /items
   def create
     @item = current_user.items.new(item_params)
+    set_unpublished
 
     if @item.save
       redirect_to @item, notice: 'Item was successfully created.'
@@ -34,6 +35,7 @@ class ItemsController < ApplicationController
 
   # PATCH/PUT /items/1
   def update
+    set_unpublished
     if @item.update(item_params)
       redirect_to @item, notice: 'Item was successfully updated.', status: :see_other
     else
@@ -57,5 +59,9 @@ class ItemsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def item_params
     params.require(:item).permit(:name, :description, :price, :shipping_cost_covered, :payment_method, :deadline)
+  end
+
+  def set_unpublished
+    params[:commit] == '非公開として保存' ? @item.unpublished! : @item.listed!
   end
 end
