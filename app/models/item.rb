@@ -13,7 +13,6 @@ class Item < ApplicationRecord
   validates :shipping_cost_covered, inclusion: { in: [true, false] }
   validates :deadline, presence: true
 
-  scope :listed, -> { where(status: :listed) }
   scope :accessible_for, ->(user) { where(user:).or(listed) }
   scope :by_status, lambda { |status|
     case status
