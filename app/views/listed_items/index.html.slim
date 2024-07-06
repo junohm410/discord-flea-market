@@ -1,0 +1,18 @@
+.w-full
+  - content_for :title, '自分の商品一覧'
+  .flex.justify-between.items-center
+    h1.font-bold.text-4xl
+      | 自分の商品一覧
+  #items.min-w-full
+    - @items.each do |item|
+      - case item.status
+      - when 'listed'
+        p.mt-3.bg-blue-600.text-white.py-1.px-2.rounded-lg.inline-block
+          | 出品中
+      - when 'unpublished'
+        p.mt-3.bg-gray-300.text-gray-800.py-1.px-2.rounded-lg.inline-block
+          | 非公開
+      = render item
+      p
+        = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+  = link_to '現在出品されている商品一覧に戻る', items_path, class: 'mt-5 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
