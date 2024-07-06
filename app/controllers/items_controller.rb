@@ -10,7 +10,7 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   def show
-    @item = Item.find(params[:id])
+    @item = Item.accessible_for(current_user).find(params[:id])
   end
 
   # GET /items/new
