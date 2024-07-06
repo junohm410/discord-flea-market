@@ -1,0 +1,19 @@
+.w-full
+  - content_for :title, '自分が購入希望を出した商品一覧'
+  .flex.justify-between.items-center
+    h1.font-bold.text-4xl
+      | 自分が購入希望を出した商品一覧
+  .flex.items-center.mt-3
+    // TODO: 抽選機能を実装したら、状態に応じてソートできるようにする
+    = link_to 'すべて', requested_items_path, class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+  #items.min-w-full
+    - @items.each do |item|
+      // TODO: 抽選機能を実装したら、抽選が終わった状態の条件分岐を増やす
+      - case item.status
+      - when 'listed'
+        p.mt-3.bg-blue-600.text-white.py-1.px-2.rounded-lg.inline-block
+          | 購入希望中
+      = render item
+      p
+        = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+  = link_to '現在出品されている商品一覧に戻る', items_path, class: 'mt-5 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
