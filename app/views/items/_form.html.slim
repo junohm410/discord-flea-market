@@ -27,4 +27,6 @@
     = form.label :deadline
     = form.datetime_field :deadline, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
   .inline
-    = form.submit class: 'rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer'
+    = form.submit '非公開として保存', class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium cursor-pointer'
+  .inline
+    = form.submit '出品する', class: 'ml-2 rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer'
