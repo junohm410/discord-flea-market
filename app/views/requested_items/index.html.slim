@@ -4,15 +4,21 @@
     h1.font-bold.text-4xl
       | 自分が購入希望を出した商品一覧
   .flex.items-center.mt-3
-    // TODO: 抽選機能を実装したら、状態に応じてソートできるようにする
     = link_to 'すべて', requested_items_path, class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to '購入希望中', requested_items_path(status: 'requested'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to '購入確定', requested_items_path(status: 'selected_as_buyer'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to '落選', requested_items_path(status: 'not_selected'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
   #items.min-w-full
     - @items.each do |item|
-      // TODO: 抽選機能を実装したら、抽選が終わった状態の条件分岐を増やす
-      - case item.status
-      - when 'listed'
+      - if item.status == 'listed'
         p.mt-3.bg-blue-600.text-white.py-1.px-2.rounded-lg.inline-block
           | 購入希望中
+      - if item.buyer == current_user
+        p.mt-3.bg-yellow-300.text-yellow-800.py-1.px-2.rounded-lg.inline-block
+          | 購入確定
+      - if item.buyer_selected? && item.buyer != current_user
+        p.mt-3.bg-gray-300.text-gray-800.py-1.px-2.rounded-lg.inline-block
+          | 落選
       = render item
       p
         = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'

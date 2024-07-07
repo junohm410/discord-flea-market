@@ -73,6 +73,7 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'slim_lint', require: false
+  gem 'whenever', require: false
 end
 
 group :test do

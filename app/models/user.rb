@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   has_many :items, dependent: :destroy
+  has_many :buyable_items, class_name: 'Item', foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
   has_many :purchase_requests, dependent: :destroy
   has_many :requested_items, through: :purchase_requests, source: :item
 

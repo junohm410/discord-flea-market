@@ -2,7 +2,17 @@
 
 class RequestedItemsController < ApplicationController
   def index
-    # TODO: 当選機能を実装したら、statusによって表示するアイテムを絞り込むようにする
-    @items = current_user.requested_items
+    items = current_user.requested_items
+    @items =
+      case params[:status]
+      when 'requested'
+        items.listed
+      when 'selected_as_buyer'
+        items.where(buyer: current_user)
+      when 'not_selected'
+        items.buyer_selected.where.not(buyer: current_user)
+      else
+        items
+      end
   end
 end
