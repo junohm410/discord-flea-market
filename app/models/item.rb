@@ -13,7 +13,7 @@ class Item < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :shipping_cost_covered, inclusion: { in: [true, false] }
   validates :deadline, presence: true
-  validate :deadline_later_than_today
+  validate :deadline_later_than_today, unless: -> { validation_context == :select_buyer }
 
   scope :accessible_for, ->(user) { where(user:).or(listed) }
   scope :by_status, lambda { |status|
