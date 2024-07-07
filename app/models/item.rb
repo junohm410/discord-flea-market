@@ -17,14 +17,6 @@ class Item < ApplicationRecord
 
   scope :accessible_for, ->(user) { where(user:).or(not_unpublished) }
   scope :closed_yesterday, -> { listed.where('deadline < ?', Time.current.beginning_of_day) }
-  scope :by_status, lambda { |status|
-    case status
-    when 'listed'
-      listed
-    when 'unpublished'
-      unpublished
-    end
-  }
 
   private
 
