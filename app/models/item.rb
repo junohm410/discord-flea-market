@@ -2,6 +2,7 @@
 
 class Item < ApplicationRecord
   belongs_to :user
+  belongs_to :buyer, class_name: 'User', optional: true, inverse_of: :buyable_items
   has_many :purchase_requests, dependent: :destroy
   has_many :requesting_users, through: :purchase_requests, source: :user
 
