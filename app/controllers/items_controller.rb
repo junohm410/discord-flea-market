@@ -62,6 +62,6 @@ class ItemsController < ApplicationController
   end
 
   def set_unpublished
-    params[:commit] == '非公開として保存' ? @item.unpublished! : @item.listed!
+    @item.status = params[:commit] == '非公開として保存' ? 'unpublished' : 'listed'
   end
 end
