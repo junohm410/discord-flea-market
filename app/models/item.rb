@@ -16,6 +16,7 @@ class Item < ApplicationRecord
   validate :deadline_later_than_today, unless: -> { validation_context == :select_buyer }
 
   scope :accessible_for, ->(user) { where(user:).or(listed) }
+  scope :closed_yesterday, -> { listed.where('deadline < ?', Time.current.beginning_of_day) }
   scope :by_status, lambda { |status|
     case status
     when 'listed'
