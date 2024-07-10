@@ -70,6 +70,7 @@ group :development do
   # gem "spring"
 
   gem 'any_login'
+  gem 'bullet'
   gem 'rubocop-fjord', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
