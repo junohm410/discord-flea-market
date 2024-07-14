@@ -5,3 +5,12 @@ inherit_gem:
 
 require:
   - rubocop-rspec
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
