@@ -5,3 +5,6 @@ inherit_gem:
 
 require:
   - rubocop-rspec
+
+RSpec/MultipleExpectations:
+  Enabled: false
