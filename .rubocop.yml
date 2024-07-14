@@ -8,3 +8,9 @@ require:
 
 RSpec/MultipleExpectations:
   Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
