@@ -23,6 +23,6 @@ class Item < ApplicationRecord
   def deadline_later_than_today
     return unless deadline < Time.current.beginning_of_day
 
-    errors.add(:deadline, "can't be later than today")
+    errors.add(:deadline, "can't be earlier than today")
   end
 end
