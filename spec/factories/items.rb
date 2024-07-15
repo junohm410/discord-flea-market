@@ -13,7 +13,6 @@ FactoryBot.define do
 
     factory :unpublished_item do
       name { '非公開商品' }
-      description { '非公開商品です' }
       status { 1 }
     end
 
@@ -21,7 +20,6 @@ FactoryBot.define do
     # 厳密なデータを作成する場合は、使用するテスト側で過去の日付を設定してbuildし、バリデーションを無効にしてsaveする
     factory :buyer_selected_item do
       name { '購入者確定済みの商品' }
-      description { '購入者確定済みの商品です' }
       status { 2 }
     end
   end
