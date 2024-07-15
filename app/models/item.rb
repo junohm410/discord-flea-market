@@ -21,8 +21,9 @@ class Item < ApplicationRecord
   private
 
   def deadline_later_than_today
+    # TODO: 日付だけの入力を受け付ける修正をする際に、境界値としてTime.current.beginning_of_dayが適切なのか、テストも含め検討する
     return unless deadline < Time.current.beginning_of_day
 
-    errors.add(:deadline, "can't be later than today")
+    errors.add(:deadline, "can't be earlier than today")
   end
 end
