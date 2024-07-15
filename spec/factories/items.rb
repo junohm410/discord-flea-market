@@ -2,12 +2,27 @@
 
 FactoryBot.define do
   factory :item do
-    name { 'MyString' }
-    description { 'MyText' }
-    price { 1 }
-    shipping_cost_covered { false }
-    payment_method { 'MyString' }
-    deadline { '2024-07-04 20:01:26' }
+    name { 'テスト商品' }
+    description { 'テスト商品です' }
+    price { 1000 }
+    shipping_cost_covered { true }
+    payment_method { 'PayPay' }
+    deadline { Time.current.tomorrow }
     user { nil }
+    status { 0 }
+
+    factory :unpublished_item do
+      name { '非公開商品' }
+      description { '非公開商品です' }
+      status { 1 }
+    end
+
+    # 購入確定済みの場合、deadlineは本来過去の日付になるべきだが、create時にバリデーションで弾かれるため、未来の日付のままにしている
+    # 厳密なデータを作成する場合は、使用するテスト側で過去の日付を設定してbuildし、バリデーションを無効にしてsaveする
+    factory :buyer_selected_item do
+      name { '購入者確定済みの商品' }
+      description { '購入者確定済みの商品です' }
+      status { 2 }
+    end
   end
 end

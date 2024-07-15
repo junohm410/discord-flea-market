@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :user do
     name { 'alice' }
-    uid { '1234567' }
+    sequence(:uid) { |n| "1234567#{n}" }
     provider { 'discord' }
     avatar_url { 'https://cdn.discordapp.com/embed/avatars/1.png' }
   end
