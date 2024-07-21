@@ -5,6 +5,7 @@ class Item < ApplicationRecord
   belongs_to :buyer, class_name: 'User', optional: true, inverse_of: :buyable_items
   has_many :purchase_requests, dependent: :destroy
   has_many :requesting_users, through: :purchase_requests, source: :user
+  has_many :comments, dependent: :destroy
 
   enum status: { listed: 0, unpublished: 1, buyer_selected: 2 }
 
