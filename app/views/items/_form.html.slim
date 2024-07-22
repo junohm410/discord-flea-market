@@ -26,6 +26,11 @@
   .my-5
     = form.label :deadline
     = form.datetime_field :deadline, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :images
+    - item.images.includes(:blob).each do |image|
+      = form.hidden_field :images, multiple: true, value: image.signed_id
+    = form.file_field :images, multiple: true, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
   .inline
     = form.submit '非公開として保存', class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium cursor-pointer'
   .inline
