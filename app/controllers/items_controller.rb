@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
 
   # GET /items
   def index
-    @items = Item.listed.includes(:user)
+    @items = Item.listed.includes(:user, :images_attachments)
   end
 
   # GET /items/1

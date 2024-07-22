@@ -20,6 +20,11 @@
       - when 'buyer_selected'
         p.mt-3.bg-yellow-300.text-yellow-800.py-1.px-2.rounded-lg.inline-block
           | 購入者確定
+      .my-5.w-1/6
+        - if item.images.attached?
+          = image_tag item.images.includes(:blob).first.variant(resize_to_limit: [200, 200])
+        - else
+          = image_tag 'no_image.png'
       = render item
       p
         = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
