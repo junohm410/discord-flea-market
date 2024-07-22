@@ -9,11 +9,12 @@
     = link_to 'New item', new_item_path, class: 'rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium'
   #items.min-w-full
     - @items.each do |item|
-      .my-5.w-1/6
-        - if item.images.attached?
-          = image_tag item.images.includes(:blob).first.variant(resize_to_limit: [200, 200])
-        - else
-          = image_tag 'no_image.png'
-      = render item
-      p
-        = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+      div id="item_container_#{item.id}"
+        .my-5.w-1/6
+          - if item.images.attached?
+            = image_tag item.images.includes(:blob).first.variant(resize_to_limit: [200, 200])
+          - else
+            = image_tag 'no_image.png'
+        = render item
+        p
+          = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'

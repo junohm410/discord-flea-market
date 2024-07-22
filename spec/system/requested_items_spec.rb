@@ -16,12 +16,30 @@ RSpec.describe 'RequestedItems', type: :system do
     FactoryBot.create(:purchase_request, item: not_selected_as_buyer_item, user: alice)
   end
 
-  it 'user can check all of their requesting items' do
+  it 'user can check all of their requesting items attached with images' do
+    currently_requesting_item = Item.find_by(name: '購入希望中の商品')
+    selected_as_buyer_item = Item.find_by(name: '購入確定の商品')
+    not_selected_as_buyer_item = Item.find_by(name: '落選の商品')
+    currently_requesting_item.images.attach(io: File.open(Rails.root.join('spec/files/book.png')), filename: 'book.png')
+    currently_requesting_item.images.attach(io: File.open(Rails.root.join('spec/files/books.png')), filename: 'books.png')
+    selected_as_buyer_item.images.attach(io: File.open(Rails.root.join('spec/files/books.png')), filename: 'books.png')
+
     sign_in alice
     visit requested_items_path
-    expect(page).to have_content '購入希望中の商品'
-    expect(page).to have_content '購入確定の商品'
-    expect(page).to have_content '落選の商品'
+
+    within "#requested_item_container_#{currently_requesting_item.id}" do
+      expect(page).to have_content '購入希望中の商品'
+      expect(page).to have_selector("img[src$='book.png']")
+      expect(page).not_to have_selector("img[src$='books.png']")
+    end
+    within "#requested_item_container_#{selected_as_buyer_item.id}" do
+      expect(page).to have_content '購入確定の商品'
+      expect(page).to have_selector("img[src$='books.png']")
+    end
+    within "#requested_item_container_#{not_selected_as_buyer_item.id}" do
+      expect(page).to have_content '落選の商品'
+      expect(page).to have_selector("img[src*='no_image']")
+    end
   end
 
   it 'user can filter items by status' do

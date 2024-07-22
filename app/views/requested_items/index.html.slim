@@ -10,22 +10,23 @@
     = link_to '落選', requested_items_path(status: 'not_selected'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
   #items.min-w-full
     - @items.each do |item|
-      - if item.listed?
-        p.mt-3.bg-blue-600.text-white.py-1.px-2.rounded-lg.inline-block
-          | 購入希望中
-      - if item.buyer_selected?
-        - if item.buyer == current_user
-          p.mt-3.bg-yellow-300.text-yellow-800.py-1.px-2.rounded-lg.inline-block
-            | 購入確定
-        - else
-          p.mt-3.bg-gray-300.text-gray-800.py-1.px-2.rounded-lg.inline-block
-            | 落選
-      .my-5.w-1/6
-        - if item.images.attached?
-          = image_tag item.images.includes(:blob).first.variant(resize_to_limit: [200, 200])
-        - else
-          = image_tag 'no_image.png'
-      = render item
-      p
-        = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+      div id="requested_item_container_#{item.id}"
+        - if item.listed?
+          p.mt-3.bg-blue-600.text-white.py-1.px-2.rounded-lg.inline-block
+            | 購入希望中
+        - if item.buyer_selected?
+          - if item.buyer == current_user
+            p.mt-3.bg-yellow-300.text-yellow-800.py-1.px-2.rounded-lg.inline-block
+              | 購入確定
+          - else
+            p.mt-3.bg-gray-300.text-gray-800.py-1.px-2.rounded-lg.inline-block
+              | 落選
+        .my-5.w-1/6
+          - if item.images.attached?
+            = image_tag item.images.includes(:blob).first.variant(resize_to_limit: [200, 200])
+          - else
+            = image_tag 'no_image.png'
+        = render item
+        p
+          = link_to 'Show this item', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
   = link_to '現在出品されている商品一覧に戻る', items_path, class: 'mt-5 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
