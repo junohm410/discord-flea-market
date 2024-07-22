@@ -1,5 +1,7 @@
 .mx-auto.md:w-2/3.w-full.flex
   .mx-auto
+    h1.font-bold.text-4xl
+      | 商品の詳細
     - if notice.present?
       p#notice.py-2.px-3.bg-green-50.mb-5.text-green-500.font-medium.rounded-lg.inline-block
         = notice
@@ -33,7 +35,10 @@
           = button_to '購入希望を出す', item_purchase_requests_path(@item), class: 'mt-2 rounded-lg py-3 px-5 bg-blue-600 text-white font-medium'
     - if @item.user == current_user && !@item.buyer_selected?
       = link_to 'Edit this item', edit_item_path(@item), class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
-    = link_to 'Back to items', items_path, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
     - if @item.user == current_user
       .inline-block.ml-2
         = button_to 'Destroy this item', @item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
+
+    = render 'comments', item: @item
+
+    = link_to 'Back to items', items_path, class: 'my-5 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
