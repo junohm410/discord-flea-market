@@ -1,4 +1,11 @@
 .mx-auto.md:w-2/3.w-full.flex
+  .max-auto
+    .my-5
+      - if @item.images.attached?
+        - @item.images.includes(:blob).find_each do |image|
+          = image_tag image.variant(resize_to_limit: [500, 500]), class: 'w-1/2 mx-auto'
+      - else
+        = image_tag 'no_image.png', class: 'w-1/2 mx-auto'
   .mx-auto
     h1.font-bold.text-4xl
       | 商品の詳細

@@ -18,9 +18,15 @@ RSpec.describe 'Items', type: :system do
       check 'Shipping cost covered'
       fill_in 'Payment method', with: 'PayPay'
       fill_in 'Deadline', with: Time.current.tomorrow
+      attach_file 'Images', [
+        Rails.root.join('spec/files/book.png'),
+        Rails.root.join('spec/files/books.png')
+      ]
       click_on '出品する'
       expect(page).to have_content 'Item was successfully created.'
       expect(page).to have_content 'テスト商品'
+      expect(page).to have_selector("img[src$='book.png']")
+      expect(page).to have_selector("img[src$='books.png']")
     end
 
     it 'user can save an item as unpublished' do
@@ -108,6 +114,25 @@ RSpec.describe 'Items', type: :system do
       expect(page).not_to have_content unpublished_item.name
       expect(page).not_to have_content buyer_selected_item.name
     end
+
+    describe 'showing images attached with items' do
+      it 'user can see images attached with items' do
+        item_with_images = FactoryBot.create(:item, user: alice)
+        item_without_images = FactoryBot.create(:item, user: alice)
+        item_with_images.images.attach(io: File.open(Rails.root.join('spec/files/book.png')), filename: 'book.png')
+        item_with_images.images.attach(io: File.open(Rails.root.join('spec/files/books.png')), filename: 'books.png')
+
+        sign_in alice
+        visit items_path
+        within "#item_container_#{item_with_images.id}" do
+          expect(page).to have_selector("img[src$='book.png']")
+          expect(page).not_to have_selector("img[src$='books.png']")
+        end
+        within "#item_container_#{item_without_images.id}" do
+          expect(page).to have_selector("img[src*='no_image']")
+        end
+      end
+    end
   end
 
   describe 'showing items' do
@@ -142,6 +167,15 @@ RSpec.describe 'Items', type: :system do
         expect(page).to have_content '落選しました'
         visit item_path(just_selection_finished_item)
         expect(page).to have_content '終了しました'
+      end
+    end
+
+    context 'when no images is attached with an item' do
+      it 'user can see a default image' do
+        item = FactoryBot.create(:item, user: alice)
+        sign_in alice
+        visit item_path(item)
+        expect(page).to have_selector("img[src*='no_image']")
       end
     end
   end

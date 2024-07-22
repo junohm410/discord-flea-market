@@ -6,6 +6,7 @@ class Item < ApplicationRecord
   has_many :purchase_requests, dependent: :destroy
   has_many :requesting_users, through: :purchase_requests, source: :user
   has_many :comments, dependent: :destroy
+  has_many_attached :images
 
   enum status: { listed: 0, unpublished: 1, buyer_selected: 2 }
 

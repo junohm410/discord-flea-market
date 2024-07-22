@@ -70,4 +70,10 @@ RSpec.configure do |config|
   end
 
   config.include Devise::Test::IntegrationHelpers, type: :system
+
+  config.after(:suite) do
+    Pathname(ActiveStorage::Blob.service.root).each_child do |path|
+      path.rmtree if path.directory?
+    end
+  end
 end
