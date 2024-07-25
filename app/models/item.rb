@@ -20,6 +20,10 @@ class Item < ApplicationRecord
   scope :accessible_for, ->(user) { where(user:).or(not_unpublished) }
   scope :closed_yesterday, -> { listed.where('deadline < ?', Time.current.beginning_of_day) }
 
+  def changed_to_listed_from_unpublished?
+    saved_change_to_status == %w[unpublished listed]
+  end
+
   private
 
   def deadline_later_than_today
