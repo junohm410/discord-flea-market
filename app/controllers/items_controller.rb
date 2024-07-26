@@ -27,6 +27,7 @@ class ItemsController < ApplicationController
     set_unpublished
 
     if @item.save
+      DiscordNotifier.with(item: @item).listed_item.notify_now if @item.listed?
       redirect_to @item, notice: 'Item was successfully created.'
     else
       render :new, status: :unprocessable_entity
@@ -37,6 +38,7 @@ class ItemsController < ApplicationController
   def update
     set_unpublished
     if @item.update(item_params)
+      DiscordNotifier.with(item: @item).listed_item.notify_now if @item.changed_to_listed_from_unpublished?
       redirect_to @item, notice: 'Item was successfully updated.', status: :see_other
     else
       render :edit, status: :unprocessable_entity

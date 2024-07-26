@@ -44,4 +44,24 @@ RSpec.describe Item, type: :model do
       expect(item.errors[:deadline]).to be_empty
     end
   end
+
+  describe '#changed_to_listed_from_unpublished?' do
+    context 'when an item status has changed from unpublished to listed' do
+      it 'returns true' do
+        item = FactoryBot.create(:unpublished_item, user: alice)
+        item.status = 'listed'
+        item.save
+        expect(item.changed_to_listed_from_unpublished?).to be true
+      end
+    end
+
+    context 'when an item status has changed from listed to unpublished' do
+      it 'returns false' do
+        item = FactoryBot.create(:item, user: alice)
+        item.status = 'unpublished'
+        item.save
+        expect(item.changed_to_listed_from_unpublished?).to be false
+      end
+    end
+  end
 end

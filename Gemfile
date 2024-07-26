@@ -46,8 +46,10 @@ gem 'bootsnap', require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem 'image_processing', '~> 1.2'
 
+gem 'active_delivery', '~> 1.0'
 gem 'any_login'
 gem 'devise'
+gem 'discordrb'
 gem 'omniauth-discord'
 gem 'omniauth-rails_csrf_protection'
 gem 'slim-rails'
