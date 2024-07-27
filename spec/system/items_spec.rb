@@ -98,6 +98,18 @@ RSpec.describe 'Items', type: :system do
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).not_to have_content 'この商品は非公開です'
       end
+
+      it 'purchase requests are deleted when an item is made unpublished' do
+        FactoryBot.create(:purchase_request, item:, user: bob)
+        sign_in alice
+        visit item_path(item)
+        click_on 'Edit this item'
+        expect do
+          click_on '非公開として保存'
+          expect(page).to have_content 'Item was successfully updated.'
+          expect(page).to have_content 'この商品は非公開です'
+        end.to change { item.purchase_requests.count }.from(1).to(0)
+      end
     end
   end
 
