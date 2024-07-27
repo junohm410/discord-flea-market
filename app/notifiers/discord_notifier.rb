@@ -41,4 +41,19 @@ class DiscordNotifier < AbstractNotifier::Base
       body: "<@#{item.user.uid}> さんの「#{item.name}」は購入希望者がつかずに出品が終了しました。"
     )
   end
+
+  def item_unlisted(params = {})
+    params.merge!(@params)
+    item = params[:item]
+    requesting_users = params[:requesting_users]
+
+    body = <<~TEXT.chomp
+      #{item.user.name} さんの「#{item.name}」の出品が取り下げられました。
+      TO: #{requesting_users.map { |user| "<@#{user.uid}> さん" }.join(', ')}
+    TEXT
+
+    notification(
+      body:
+    )
+  end
 end
