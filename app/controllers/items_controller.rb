@@ -48,7 +48,9 @@ class ItemsController < ApplicationController
 
   # DELETE /items/1
   def destroy
+    requesting_users = @item.requesting_users.to_a
     @item.destroy!
+    DiscordNotifier.with(item: @item, requesting_users:).item_unlisted.notify_now if requesting_users.present?
     redirect_to items_url, notice: 'Item was successfully destroyed.', status: :see_other
   end
 
