@@ -23,7 +23,7 @@ user4 = User.fourth
     price: 1000,
     shipping_cost_covered: true,
     payment_method: '楽天ペイ',
-    deadline: Time.current.next_month,
+    deadline: Time.current.next_month.beginning_of_day,
     status: :listed
   )
 end
@@ -35,7 +35,7 @@ end
     price: 1000,
     shipping_cost_covered: true,
     payment_method: 'PayPay',
-    deadline: Time.current.yesterday,
+    deadline: Time.current.yesterday.beginning_of_day,
     status: :listed
   )
   item.save!(validate: false)
@@ -47,7 +47,7 @@ user1.items.new(
   price: 1000,
   shipping_cost_covered: true,
   payment_method: '楽天ペイ',
-  deadline: Time.current.prev_month,
+  deadline: Time.current.prev_month.beginning_of_day,
   status: :buyer_selected,
   buyer: user2
 ).save!(validate: false)

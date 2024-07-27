@@ -43,6 +43,12 @@ RSpec.describe Item, type: :model do
       item.valid?
       expect(item.errors[:deadline]).to be_empty
     end
+
+    it 'validates that the deadline can be beginning of today' do
+      item = FactoryBot.build(:item, user: alice, deadline: Time.current.beginning_of_day)
+      item.valid?
+      expect(item.errors[:deadline]).to be_empty
+    end
   end
 
   describe '#changed_to_listed_from_unpublished?' do
