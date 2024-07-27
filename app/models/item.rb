@@ -24,6 +24,10 @@ class Item < ApplicationRecord
     saved_change_to_status == %w[unpublished listed]
   end
 
+  def changed_to_unpublished_from_listed?
+    saved_change_to_status == %w[listed unpublished]
+  end
+
   private
 
   def deadline_later_than_today
