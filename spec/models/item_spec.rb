@@ -63,5 +63,49 @@ RSpec.describe Item, type: :model do
         expect(item.changed_to_listed_from_unpublished?).to be false
       end
     end
+
+    context 'when an item status has not changed' do
+      it 'returns false' do
+        listed_item = FactoryBot.create(:item, user: alice)
+        listed_item.update(name: '更新後の商品名')
+        expect(listed_item.changed_to_unpublished_from_listed?).to be false
+
+        unpublished_item = FactoryBot.create(:unpublished_item, user: alice)
+        unpublished_item.update(name: '更新後の商品名')
+        expect(unpublished_item.changed_to_unpublished_from_listed?).to be false
+      end
+    end
+  end
+
+  describe 'changed_to_unpublished_from_listed?' do
+    context 'when an item status has changed from listed to unpublished' do
+      it 'returns true' do
+        item = FactoryBot.create(:item, user: alice)
+        item.status = 'unpublished'
+        item.save
+        expect(item.changed_to_unpublished_from_listed?).to be true
+      end
+    end
+
+    context 'when an item status has changed from unpublished to listed' do
+      it 'returns false' do
+        item = FactoryBot.create(:unpublished_item, user: alice)
+        item.status = 'listed'
+        item.save
+        expect(item.changed_to_unpublished_from_listed?).to be false
+      end
+    end
+
+    context 'when an item status has not changed' do
+      it 'returns false' do
+        listed_item = FactoryBot.create(:item, user: alice)
+        listed_item.update(name: '更新後の商品名')
+        expect(listed_item.changed_to_unpublished_from_listed?).to be false
+
+        unpublished_item = FactoryBot.create(:unpublished_item, user: alice)
+        unpublished_item.update(name: '更新後の商品名')
+        expect(unpublished_item.changed_to_unpublished_from_listed?).to be false
+      end
+    end
   end
 end

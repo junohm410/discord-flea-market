@@ -38,6 +38,7 @@ class ItemsController < ApplicationController
   def update
     set_unpublished
     if @item.update(item_params)
+      @item.purchase_requests.destroy_all if @item.changed_to_unpublished_from_listed?
       DiscordNotifier.with(item: @item).item_listed.notify_now if @item.changed_to_listed_from_unpublished?
       redirect_to @item, notice: 'Item was successfully updated.', status: :see_other
     else
