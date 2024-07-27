@@ -14,4 +14,13 @@ class DiscordNotifier < AbstractNotifier::Base
       embed_message:
     )
   end
+
+  def buyer_not_selected(params = {})
+    params.merge!(@params)
+    item = params[:item]
+
+    notification(
+      body: "<@#{item.user.uid}> さんの「#{item.name}」は購入希望者がつかずに出品が終了しました。"
+    )
+  end
 end
