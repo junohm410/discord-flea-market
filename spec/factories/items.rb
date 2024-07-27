@@ -7,7 +7,7 @@ FactoryBot.define do
     price { 1000 }
     shipping_cost_covered { true }
     payment_method { 'PayPay' }
-    deadline { Time.current.tomorrow }
+    deadline { Time.current.tomorrow.beginning_of_day }
     user { nil }
     status { 0 }
 
