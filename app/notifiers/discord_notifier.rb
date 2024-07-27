@@ -3,7 +3,7 @@
 class DiscordNotifier < AbstractNotifier::Base
   self.driver = DiscordDriver.new
 
-  def listed_item(params = {})
+  def item_listed(params = {})
     params.merge!(@params)
     item = params[:item]
 
