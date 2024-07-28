@@ -1,8 +1,11 @@
 - if item.user == current_user
-  - unless item.buyer_selected?
+  - if (item.listed? && item.deadline.tomorrow > Time.current) || item.unpublished?
     = link_to 'Edit this item', edit_item_path(item), class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
-  .inline-block.ml-2
-    = button_to 'Destroy this item', item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
+    .inline-block.ml-2
+      = button_to 'Destroy this item', item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
+  - elsif item.buyer_selected?
+    .inline-block.ml-2
+      = button_to 'Destroy this item', item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
 - elsif item.listed?
   - if current_users_purchase_request.present? && item.deadline.tomorrow > Time.current
     .inline-block.mr-2
