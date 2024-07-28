@@ -1,0 +1,20 @@
+- if item.user == current_user
+  - if item.buyer_selected?
+    p.py-2.px-3.bg-yellow-300.mb-5.text-yellow-800.font-medium.rounded-lg
+      | 購入者が確定しました
+  - if item.unpublished?
+    p.py-2.px-3.bg-gray-300.mb-5.text-gray-800.font-medium.rounded-lg
+      | この商品は非公開です
+- elsif item.buyer == current_user
+  p.py-2.px-3.bg-yellow-300.mb-5.text-yellow-800.font-medium.rounded-lg
+    | あなたが購入者となりました
+- elsif current_users_purchase_request.present?
+  - if item.listed?
+    p.py-2.px-3.bg-blue-600.mb-5.text-white.font-medium.rounded-lg
+      | 購入希望を出しています
+  - elsif item.buyer_selected?
+    p.py-2.px-3.bg-gray-300.mb-5.text-gray-800.font-medium.rounded-lg
+      | 落選しました
+- elsif item.buyer_selected?
+  p.py-2.px-3.bg-red-50.mb-5.text-red-500.font-medium.rounded-lg
+    | 終了しました
