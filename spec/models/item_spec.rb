@@ -21,11 +21,12 @@ RSpec.describe Item, type: :model do
   end
 
   describe '.closed_yesterday' do
-    it 'returns items whose deadline is yesterday' do
-      closed_yesterday_item = FactoryBot.build(:item, user: alice, deadline: Time.current.yesterday)
-      closed_yesterday_item.save!(validate: false)
+    it 'only returns listed items whose deadline is yesterday' do
+      closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice)
       FactoryBot.create(:item, user: alice, deadline: Time.current.beginning_of_day)
       FactoryBot.create(:item, user: alice, deadline: Time.current.tomorrow)
+      FactoryBot.create(:buyer_selected_item, user: alice)
+      FactoryBot.create(:unpublished_item, user: alice)
 
       expect(Item.closed_yesterday).to contain_exactly closed_yesterday_item
     end
