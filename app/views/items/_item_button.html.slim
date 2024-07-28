@@ -1,0 +1,13 @@
+- if item.user == current_user
+  - if !item.buyer_selected?
+    = link_to 'Edit this item', edit_item_path(item), class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+  .inline-block.ml-2
+    = button_to 'Destroy this item', item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
+- elsif item.listed?
+  - purchase_request = item.purchase_requests.find_by(user_id: current_user.id)
+  - if purchase_request
+    .inline-block.mr-2
+      = button_to '購入希望を取り消す', item_purchase_request_path(item, purchase_request), method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-red-600 text-white font-medium'
+  - else
+    .inline-block.mr-2
+      = button_to '購入希望を出す', item_purchase_requests_path(item), class: 'mt-2 rounded-lg py-3 px-5 bg-blue-600 text-white font-medium'
