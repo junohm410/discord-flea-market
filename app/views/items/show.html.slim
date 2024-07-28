@@ -16,8 +16,10 @@
 
     = render @item
 
-    = render 'item_status_label', item: @item
-    = render 'item_button', item: @item
+    - current_users_purchase_request = @item.purchase_requests.find_by(user_id: current_user.id) if @item.user != current_user
+
+    = render('item_status_label', item: @item, current_users_purchase_request:)
+    = render('item_button', item: @item, current_users_purchase_request:)
 
     = render 'comments', item: @item
 
