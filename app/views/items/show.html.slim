@@ -6,6 +6,7 @@
           = image_tag image.variant(resize_to_limit: [500, 500]), class: 'w-1/2 mx-auto'
       - else
         = image_tag 'no_image.png', class: 'w-1/2 mx-auto'
+
   .mx-auto
     h1.font-bold.text-4xl
       | 商品の詳細
@@ -19,32 +20,35 @@
       - if @item.buyer_selected?
         p.py-2.px-3.bg-yellow-300.mb-5.text-yellow-800.font-medium.rounded-lg
           | 購入者が確定しました
+    - elsif @item.buyer == current_user
+      p.py-2.px-3.bg-yellow-300.mb-5.text-yellow-800.font-medium.rounded-lg
+        | あなたが購入者となりました
+    - elsif @item.purchase_requests.find_by(user_id: current_user.id)
+      - if @item.listed?
+        p.py-2.px-3.bg-blue-600.mb-5.text-white.font-medium.rounded-lg
+          | 購入希望を出しています
+      - elsif @item.buyer_selected?
+        p.py-2.px-3.bg-gray-300.mb-5.text-gray-800.font-medium.rounded-lg
+          | 落選しました
+    - elsif @item.buyer_selected?
+      p.py-2.px-3.bg-red-50.mb-5.text-red-500.font-medium.rounded-lg
+        | 終了しました
+
     = render @item
-    - if @item.user != current_user
+
+    - if @item.user == current_user
+      - if !@item.buyer_selected?
+        = link_to 'Edit this item', edit_item_path(@item), class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+      .inline-block.ml-2
+        = button_to 'Destroy this item', @item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
+    - elsif @item.listed?
       - purchase_request = @item.purchase_requests.find_by(user_id: current_user.id)
       - if purchase_request
-        - if @item.listed?
-          p.py-2.px-3.bg-blue-600.mb-5.text-white.font-medium.rounded-lg
-            | 購入希望を出しています
-          .inline-block.mr-2
-            = button_to '購入希望を取り消す', item_purchase_request_path(@item, purchase_request), method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-red-600 text-white font-medium'
-        - if @item.buyer == current_user
-          p.py-2.px-3.bg-yellow-300.mb-5.text-yellow-800.font-medium.rounded-lg
-            | あなたが購入者となりました
-        - if @item.buyer_selected? && @item.buyer != current_user
-          p.py-2.px-3.bg-gray-300.mb-5.text-gray-800.font-medium.rounded-lg
-            | 落選しました
-      - elsif @item.buyer_selected?
-        p.py-2.px-3.bg-red-50.mb-5.text-red-500.font-medium.rounded-lg
-          | 終了しました
+        .inline-block.mr-2
+          = button_to '購入希望を取り消す', item_purchase_request_path(@item, purchase_request), method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-red-600 text-white font-medium'
       - else
         .inline-block.mr-2
           = button_to '購入希望を出す', item_purchase_requests_path(@item), class: 'mt-2 rounded-lg py-3 px-5 bg-blue-600 text-white font-medium'
-    - if @item.user == current_user && !@item.buyer_selected?
-      = link_to 'Edit this item', edit_item_path(@item), class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
-    - if @item.user == current_user
-      .inline-block.ml-2
-        = button_to 'Destroy this item', @item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
 
     = render 'comments', item: @item
 
