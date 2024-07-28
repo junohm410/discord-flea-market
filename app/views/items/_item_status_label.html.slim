@@ -1,3 +1,7 @@
+- if item.listed? && item.deadline.tomorrow < Time.current
+  p.py-2.px-3.bg-red-50.mb-5.text-red-500.font-medium.rounded-lg
+    | 購入者の抽選待ちです
+
 - if item.user == current_user
   - if item.buyer_selected?
     p.py-2.px-3.bg-yellow-300.mb-5.text-yellow-800.font-medium.rounded-lg

@@ -22,5 +22,12 @@ FactoryBot.define do
       name { '購入者確定済みの商品' }
       status { 2 }
     end
+
+    factory :closed_yesterday_and_not_buyer_selected_item do
+      name { '昨日締め切りかつ抽選前の商品' }
+      deadline { Time.current.yesterday.beginning_of_day }
+
+      to_create { |instance| instance.save(validate: false) }
+    end
   end
 end

@@ -47,4 +47,27 @@ RSpec.describe 'PurchaseRequests', type: :system do
       expect(page).not_to have_button '購入希望を出す'
     end
   end
+
+  context 'when user checks an item between its deadline and lottery' do
+    let(:closed_yesterday_item) { FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice) }
+
+    it "user can see a label about waiting for lottery and can't create a purchase request" do
+      sign_in bob
+      visit item_path(closed_yesterday_item)
+      expect(page).to have_content '購入者の抽選待ちです'
+      expect(page).not_to have_button '購入希望を出す'
+    end
+
+    context 'when user checks their requesting item between its deadline and lottery' do
+      it "user can see a label about waiting for lottery and can't cancel a purchase request" do
+        FactoryBot.create(:purchase_request, user: bob, item: closed_yesterday_item)
+
+        sign_in bob
+        visit item_path(closed_yesterday_item)
+        expect(page).to have_content '購入者の抽選待ちです'
+        expect(page).to have_content '購入希望を出しています'
+        expect(page).not_to have_button '購入希望を取り消す'
+      end
+    end
+  end
 end

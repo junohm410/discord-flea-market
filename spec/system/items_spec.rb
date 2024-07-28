@@ -160,6 +160,18 @@ RSpec.describe 'Items', type: :system do
       end
     end
 
+    context 'when user checks their own item between its deadline and lottery' do
+      it 'user can see a label about waiting for lottery' do
+        closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice)
+
+        sign_in alice
+        visit item_path(closed_yesterday_item)
+        expect(page).to have_content '購入者の抽選待ちです'
+        expect(page).not_to have_button 'Edit this item'
+        expect(page).not_to have_button 'Destroy this item'
+      end
+    end
+
     context "when user checks another user's item" do
       it 'user can see a label about the status of an each item' do
         currently_requesting_item = FactoryBot.create(:item, user: bob)
