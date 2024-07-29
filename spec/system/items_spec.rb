@@ -193,7 +193,7 @@ RSpec.describe 'Items', type: :system do
         sign_in alice
         visit item_path(closed_yesterday_item)
         expect(page).to have_content '購入者の抽選待ちです'
-        expect(page).not_to have_button 'Edit this item'
+        expect(page).not_to have_link 'Edit this item'
         expect(page).not_to have_button 'Destroy this item'
       end
     end
