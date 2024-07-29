@@ -11,5 +11,9 @@ Rails.application.routes.draw do
     delete 'sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
+  authenticated do
+    root to: "items#index", as: :authenticated_root
+  end
+
   root to: "welcome#index"
 end
