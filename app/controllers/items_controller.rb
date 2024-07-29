@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[edit update destroy]
+  before_action :set_item, only: %i[update destroy]
 
   # GET /items
   def index
@@ -19,7 +19,9 @@ class ItemsController < ApplicationController
   end
 
   # GET /items/1/edit
-  def edit; end
+  def edit
+    @item = current_user.items.editable.find(params[:id])
+  end
 
   # POST /items
   def create
