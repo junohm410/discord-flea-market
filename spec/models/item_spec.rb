@@ -52,6 +52,39 @@ RSpec.describe Item, type: :model do
     end
   end
 
+  describe 'validate price_cannot_be_changed_when_listed' do
+    let(:listed_item) { FactoryBot.create(:item, user: alice) }
+    let(:unpublished_item) { FactoryBot.create(:unpublished_item, user: alice) }
+
+    context 'when the item is listed' do
+      it 'validates that the price cannot be changed' do
+        listed_item.update(price: 2000)
+        expect(listed_item.errors[:price]).to include 'cannot be changed while the item is listed'
+      end
+
+      it 'validates that other columns except price can be changed' do
+        listed_item.update(name: '更新後の商品名')
+        expect(listed_item.errors[:price]).to be_empty
+      end
+    end
+
+    context 'when the item is unpublished' do
+      it 'validates that the price can be changed' do
+        unpublished_item.update(price: 2000)
+        expect(unpublished_item.errors[:price]).to be_empty
+      end
+    end
+
+    context 'when the item is changed from unpublished to listed' do
+      it 'validates that the price can be changed' do
+        unpublished_item.price = 2000
+        unpublished_item.status = 'listed'
+        unpublished_item.valid?
+        expect(unpublished_item.errors[:price]).to be_empty
+      end
+    end
+  end
+
   describe '#changed_to_listed_from_unpublished?' do
     context 'when an item status has changed from unpublished to listed' do
       it 'returns true' do
