@@ -111,6 +111,27 @@ RSpec.describe 'Items', type: :system do
         end.to change { item.purchase_requests.count }.from(1).to(0)
       end
     end
+
+    context 'when user wants to change price of an item' do
+      it "user can't change price of a listed item" do
+        sign_in alice
+        visit item_path(item)
+        click_on 'Edit this item'
+        expect(page).to have_content '※この商品は出品中です。一度出品した商品の価格は、出品中は変更できません。'
+        expect(page).to have_field 'Price', readonly: true
+      end
+
+      it 'user can change price of an unpublished item' do
+        sign_in alice
+        visit item_path(unpublished_item)
+        click_on 'Edit this item'
+        expect(page).to have_field 'Price', readonly: false
+        fill_in 'Price', with: 2000
+        click_on '出品する'
+        expect(page).to have_content 'Item was successfully updated.'
+        expect(page).to have_content '2000'
+      end
+    end
   end
 
   describe 'indexing items' do

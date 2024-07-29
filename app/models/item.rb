@@ -16,6 +16,7 @@ class Item < ApplicationRecord
   validates :shipping_cost_covered, inclusion: { in: [true, false] }
   validates :deadline, presence: true
   validate :deadline_later_than_today, unless: -> { validation_context == :select_buyer }
+  validate :price_cannot_be_changed_when_listed, on: :update
 
   scope :accessible_for, ->(user) { where(user:).or(not_unpublished) }
   scope :closed_yesterday, -> { listed.where('deadline < ?', Time.current.beginning_of_day) }
@@ -34,5 +35,19 @@ class Item < ApplicationRecord
     return if deadline.present? && deadline >= Time.current.beginning_of_day
 
     errors.add(:deadline, "can't be earlier than today")
+  end
+
+  def price_cannot_be_changed_when_listed
+    return if price_not_changed_during_listed? || change_to_be_saved_to_listed_from_unpublished?
+
+    errors.add(:price, 'cannot be changed while the item is listed')
+  end
+
+  def change_to_be_saved_to_listed_from_unpublished?
+    status_change_to_be_saved == %w[unpublished listed]
+  end
+
+  def price_not_changed_during_listed?
+    !(listed? && will_save_change_to_price?)
   end
 end
