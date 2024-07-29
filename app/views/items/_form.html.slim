@@ -13,7 +13,14 @@
     = form.text_field :name, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
   .my-5
     = form.label :price
-    = form.number_field :price, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+    - if item.new_record? || item.unpublished?
+      = form.number_field :price, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+    - else
+      = form.number_field :price, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full', readonly: true
+      p.text-gray-400.font-medium.mt-2.text-sm
+        | ※この商品は出品中です。一度出品した商品の価格は、出品中は変更できません。<br>
+        | 価格を変更したい場合は、商品を非公開にした後に価格を変更し、再度出品してください。<br>
+        | 商品を非公開にすると、出品が取り消された扱いとなり、既存の購入希望は全て取り消され、購入希望者にその旨の通知が送られます。
   .my-5
     = form.label :description
     = form.text_area :description, rows: 4, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
