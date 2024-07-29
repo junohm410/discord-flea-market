@@ -176,8 +176,13 @@ RSpec.describe 'Items', type: :system do
         sign_in alice
         visit item_path(unpublished_item)
         expect(page).to have_content 'この商品は非公開です'
+        expect(page).to have_link 'Edit this item'
+        expect(page).to have_button 'Destroy this item'
+
         visit item_path(buyer_selected_item)
         expect(page).to have_content '購入者が確定しました'
+        expect(page).not_to have_link 'Edit this item'
+        expect(page).to have_button 'Destroy this item'
       end
     end
 
