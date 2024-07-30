@@ -132,6 +132,20 @@ RSpec.describe 'Items', type: :system do
         expect(page).to have_content '2000'
       end
     end
+
+    context 'when user wants to edit an unpublished item whose deadline has passed once and no one has been selected as a buyer' do
+      it 'user can edit it and list it again' do
+        target_item = FactoryBot.create(:deadline_passed_once_and_not_buyer_selected_item, user: alice)
+        sign_in alice
+        visit item_path(target_item)
+        click_on 'Edit this item'
+        fill_in 'Name', with: '再出品商品'
+        fill_in 'Deadline', with: Time.current.tomorrow
+        click_on '出品する'
+        expect(page).to have_content 'Item was successfully updated.'
+        expect(page).to have_content '再出品商品'
+      end
+    end
   end
 
   describe 'indexing items' do
@@ -176,19 +190,24 @@ RSpec.describe 'Items', type: :system do
         sign_in alice
         visit item_path(unpublished_item)
         expect(page).to have_content 'この商品は非公開です'
+        expect(page).to have_link 'Edit this item'
+        expect(page).to have_button 'Destroy this item'
+
         visit item_path(buyer_selected_item)
         expect(page).to have_content '購入者が確定しました'
+        expect(page).not_to have_link 'Edit this item'
+        expect(page).to have_button 'Destroy this item'
       end
     end
 
     context 'when user checks their own item between its deadline and lottery' do
       it 'user can see a label about waiting for lottery' do
-        closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice)
+        closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_waiting_for_the_lottery_item, user: alice)
 
         sign_in alice
         visit item_path(closed_yesterday_item)
         expect(page).to have_content '購入者の抽選待ちです'
-        expect(page).not_to have_button 'Edit this item'
+        expect(page).not_to have_link 'Edit this item'
         expect(page).not_to have_button 'Destroy this item'
       end
     end

@@ -49,7 +49,7 @@ RSpec.describe 'PurchaseRequests', type: :system do
   end
 
   context 'when user checks an item between its deadline and lottery' do
-    let(:closed_yesterday_item) { FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice) }
+    let(:closed_yesterday_item) { FactoryBot.create(:closed_yesterday_and_waiting_for_the_lottery_item, user: alice) }
 
     it "user can see a label about waiting for lottery and can't create a purchase request" do
       sign_in bob
