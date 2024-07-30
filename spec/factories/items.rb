@@ -29,5 +29,13 @@ FactoryBot.define do
 
       to_create { |instance| instance.save(validate: false) }
     end
+
+    factory :deadline_passed_once_and_not_buyer_selected_item do
+      name { '一度締切が過ぎて、かつ購入者がつかなかった商品' }
+      status { 1 }
+      deadline { Time.current.yesterday.beginning_of_day }
+
+      to_create { |instance| instance.save(validate: false) }
+    end
   end
 end

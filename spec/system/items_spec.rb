@@ -132,6 +132,20 @@ RSpec.describe 'Items', type: :system do
         expect(page).to have_content '2000'
       end
     end
+
+    context 'when user wants to edit an unpublished item whose deadline has passed once and no one has been selected as a buyer' do
+      it 'user can edit it and list it again' do
+        target_item = FactoryBot.create(:deadline_passed_once_and_not_buyer_selected_item, user: alice)
+        sign_in alice
+        visit item_path(target_item)
+        click_on 'Edit this item'
+        fill_in 'Name', with: '再出品商品'
+        fill_in 'Deadline', with: Time.current.tomorrow
+        click_on '出品する'
+        expect(page).to have_content 'Item was successfully updated.'
+        expect(page).to have_content '再出品商品'
+      end
+    end
   end
 
   describe 'indexing items' do
