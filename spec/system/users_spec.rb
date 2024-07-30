@@ -21,6 +21,8 @@ RSpec.describe 'Users', type: :system do
   it 'can sign out' do
     sign_in user
     visit items_path
+    click_on 'Menu'
+    take_screenshot
     click_on 'ログアウト'
     expect(page).to have_content 'Welcome'
     expect(page).to have_content 'Discordでログイン'
