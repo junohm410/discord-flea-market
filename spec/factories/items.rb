@@ -23,7 +23,7 @@ FactoryBot.define do
       status { 2 }
     end
 
-    factory :closed_yesterday_and_not_buyer_selected_item do
+    factory :closed_yesterday_and_waiting_for_the_lottery_item do
       name { '昨日締め切りかつ抽選前の商品' }
       deadline { Time.current.yesterday.beginning_of_day }
 

@@ -25,7 +25,7 @@ RSpec.describe Item, type: :model do
       listing_item = FactoryBot.create(:item, user: alice)
       unpublished_item = FactoryBot.create(:unpublished_item, user: alice)
       done_lottery_once_and_not_buyer_selected_item = FactoryBot.create(:deadline_passed_once_and_not_buyer_selected_item, user: alice)
-      FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice)
+      FactoryBot.create(:closed_yesterday_and_waiting_for_the_lottery_item, user: alice)
       FactoryBot.create(:buyer_selected_item, user: alice)
 
       expect(Item.editable).to contain_exactly(listing_item, unpublished_item, done_lottery_once_and_not_buyer_selected_item)
@@ -34,7 +34,7 @@ RSpec.describe Item, type: :model do
 
   describe '.closed_yesterday' do
     it 'only returns listed items whose deadline is yesterday' do
-      closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice)
+      closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_waiting_for_the_lottery_item, user: alice)
       FactoryBot.create(:item, user: alice, deadline: Time.current.beginning_of_day)
       FactoryBot.create(:item, user: alice, deadline: Time.current.tomorrow)
       FactoryBot.create(:buyer_selected_item, user: alice)

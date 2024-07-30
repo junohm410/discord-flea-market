@@ -202,7 +202,7 @@ RSpec.describe 'Items', type: :system do
 
     context 'when user checks their own item between its deadline and lottery' do
       it 'user can see a label about waiting for lottery' do
-        closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_not_buyer_selected_item, user: alice)
+        closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_waiting_for_the_lottery_item, user: alice)
 
         sign_in alice
         visit item_path(closed_yesterday_item)
