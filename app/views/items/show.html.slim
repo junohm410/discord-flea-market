@@ -1,11 +1,15 @@
-.mx-auto.md:w-2/3.w-full.flex
-  .max-auto
-    .my-5
-      - if @item.images.attached?
-        - @item.images.includes(:blob).find_each do |image|
-          = image_tag image.variant(resize_to_limit: [500, 500]), class: 'w-1/2 mx-auto'
-      - else
-        = image_tag 'no_image.png', class: 'w-1/2 mx-auto'
+.mx-auto.md:w-2/3.w-full.flex.flex-wrap.justify-center
+  .mx-auto
+    - if @item.images.attached?
+      div data-controller='item-carousel'
+        section.splide aria-label='商品画像一覧'
+          div.splide__track
+            ul.splide__list
+              - @item.images.includes(:blob).find_each do |image|
+                li class='splide__slide !flex !justify-center !items-center'
+                  = image_tag image.variant(resize_to_fit: [400, 400])
+    - else
+      = image_tag 'no_image.png', class: 'w-1/2 mx-auto'
 
   .mx-auto
     h1.font-bold.text-4xl
