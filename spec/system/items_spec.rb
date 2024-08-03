@@ -26,6 +26,7 @@ RSpec.describe 'Items', type: :system do
       expect(page).to have_content 'Item was successfully created.'
       expect(page).to have_content 'テスト商品'
       expect(page).to have_selector("img[src$='book.png']")
+      find('.splide__arrow.splide__arrow--next').click
       expect(page).to have_selector("img[src$='books.png']")
     end
 
