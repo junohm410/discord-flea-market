@@ -15,12 +15,12 @@ class CommentsController < ApplicationController
   end
 
   def update
-    @comment = current_user.comments.find(params[:id])
+    comment = current_user.comments.find(params[:id])
 
-    if @comment.update(comment_params)
-      redirect_to @comment.item, notice: 'コメントを更新しました'
+    if comment.update(comment_params)
+      render partial: 'items/comment_update', locals: { item: comment.item, comment: }
     else
-      render partial: 'items/comments_form', locals: { comment: @comment }, layout: false, status: :unprocessable_entity
+      render partial: 'items/comments_form', locals: { comment: }, layout: false, status: :unprocessable_entity
     end
   end
 
