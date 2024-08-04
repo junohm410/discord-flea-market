@@ -3,14 +3,22 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[edit update destroy]
 
+  def new
+    @comment = Item.find(params[:item_id]).comments.new
+    @comment.user = current_user
+  end
+
   def edit; end
 
   def create
     item = Item.find(params[:item_id])
-    comment = item.comments.build(comment_params)
-    comment.user = current_user
-    comment.save!
-    redirect_to item, notice: 'コメントを投稿しました'
+    @comment = item.comments.build(comment_params)
+    @comment.user = current_user
+    if @comment.save
+      flash.now[:notice] = 'コメントを投稿しました'
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def update

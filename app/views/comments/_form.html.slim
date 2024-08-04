@@ -13,5 +13,6 @@
     .my-5
       = form.text_area :content, rows: 4, required: true, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
     .flex
-      = form.submit '更新', class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'
-      = link_to 'キャンセル', comment.item, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'
+      - submit_label = comment.new_record? ? 'コメントする' : '更新'
+      = form.submit submit_label, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium cursor-pointer'
+      = link_to 'キャンセル', comment.item, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium' if comment.persisted?
