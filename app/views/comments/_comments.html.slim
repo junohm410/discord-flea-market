@@ -3,8 +3,7 @@
     | コメント
   - if (comments = item.comments.order(:id).includes(:user).presence)
     ul
-      - comments.each do |comment|
-        = render 'items/comment', item:, comment:
+      = render partial: 'comments/comment', collection: comments, as: :comment, locals: { item: }
 
   - else
     p.my-5

@@ -22,6 +22,6 @@
     = render('item_status_label', item: @item, current_users_purchase_request:)
     = render('item_button', item: @item, current_users_purchase_request:)
 
-    = render 'comments', item: @item
+    = render 'comments/comments', item: @item
 
     = link_to 'Back to items', items_path, class: 'my-5 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'

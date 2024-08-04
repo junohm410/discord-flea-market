@@ -1,0 +1,3 @@
+= turbo_stream.replace @comment
+  = render partial: 'comment', locals: { item: @comment.item, comment: @comment }
+= turbo_stream.update 'flash', partial: 'layouts/flash'

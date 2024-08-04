@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  def edit
-    @comment = current_user.comments.find(params[:id])
-    render partial: 'items/comments_form', locals: { comment: @comment }, layout: false
-  end
+  before_action :set_comment, only: %i[edit update destroy]
+
+  def edit; end
 
   def create
     item = Item.find(params[:item_id])
@@ -15,26 +14,25 @@ class CommentsController < ApplicationController
   end
 
   def update
-    comment = current_user.comments.find(params[:id])
-
-    if comment.update(comment_params)
+    if @comment.update(comment_params)
       flash.now[:notice] = 'コメントを更新しました'
-      render partial: 'items/comment_update', locals: { item: comment.item, comment: }
     else
-      render partial: 'items/comments_form', locals: { comment: }, layout: false, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    comment = current_user.comments.find(params[:id])
-    comment.destroy!
+    @comment.destroy!
     flash.now[:notice] = 'コメントを削除しました'
-    render partial: 'items/comment_destroy', locals: { comment: }
   end
 
   private
 
   def comment_params
     params.require(:comment).permit(:content)
+  end
+
+  def set_comment
+    @comment = current_user.comments.find(params[:id])
   end
 end
