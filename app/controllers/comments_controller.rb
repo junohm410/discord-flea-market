@@ -18,6 +18,7 @@ class CommentsController < ApplicationController
     comment = current_user.comments.find(params[:id])
 
     if comment.update(comment_params)
+      flash.now[:notice] = 'コメントを更新しました'
       render partial: 'items/comment_update', locals: { item: comment.item, comment: }
     else
       render partial: 'items/comments_form', locals: { comment: }, layout: false, status: :unprocessable_entity
