@@ -1,12 +1,27 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
+  def edit
+    @comment = current_user.comments.find(params[:id])
+    render partial: 'items/comments_form', locals: { comment: @comment }, layout: false
+  end
+
   def create
     item = Item.find(params[:item_id])
     comment = item.comments.build(comment_params)
     comment.user = current_user
     comment.save!
     redirect_to item, notice: 'コメントを投稿しました'
+  end
+
+  def update
+    @comment = current_user.comments.find(params[:id])
+
+    if @comment.update(comment_params)
+      redirect_to @comment.item, notice: 'コメントを更新しました'
+    else
+      render partial: 'items/comments_form', locals: { comment: @comment }, layout: false, status: :unprocessable_entity
+    end
   end
 
   def destroy

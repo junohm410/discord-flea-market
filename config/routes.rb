@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :items do
     resources :purchase_requests, only: [:create, :destroy]
-    resources :comments, only: [:create, :destroy]
+    resources :comments, only: [:create, :edit, :update, :destroy]
   end
   get 'listed_items', to: "listed_items#index"
   get 'requested_items', to: "requested_items#index"

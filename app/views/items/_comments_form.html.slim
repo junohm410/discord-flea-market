@@ -1,0 +1,17 @@
+= turbo_frame_tag comment
+  - if comment.errors.any?
+    #error_explanation.bg-red-50.text-red-500.px-3.py-2.font-medium.rounded-lg.mt-3
+      h2
+        = pluralize(comment.errors.count, 'error')
+        |  prohibited this comment from being saved:
+      ul
+        - comment.errors.each do |error|
+          li
+            = error.full_message
+
+  = form_with(model: [comment.item, comment], class: 'mt-5') do |form|
+    .my-5
+      = form.text_area :content, rows: 4, required: true, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+    .flex
+      = form.submit '更新', class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'
+      = link_to 'キャンセル', comment.item, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'

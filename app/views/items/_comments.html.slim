@@ -4,12 +4,15 @@
   - if (comments = item.comments.order(:id).includes(:user).presence)
     ul
       - comments.each do |comment|
-        li.my-5
-          = comment.content
-          small.block
-            | #{comment.user.name} - #{comment.created_at}
-            - if comment.user == current_user
-              = button_to '削除', item_comment_path(item, comment), method: :delete, class: 'mt-1 inline rounded-lg py-1 px-3 bg-gray-100 font-medium'
+        = turbo_frame_tag comment
+          li.my-5
+            = comment.content
+            small.block
+              | #{comment.user.name} - #{comment.created_at}
+              - if comment.user == current_user
+                .flex
+                  = link_to '編集', edit_item_comment_path(item, comment), class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'
+                  = button_to '削除', item_comment_path(item, comment), method: :delete, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'
   - else
     p.my-5
       | まだコメントはありません
