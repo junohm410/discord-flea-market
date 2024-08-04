@@ -55,4 +55,21 @@ RSpec.describe 'Comments', type: :system do
       expect(page).to have_button '削除'
     end
   end
+
+  it 'user can cansel edit a comment' do
+    comment = FactoryBot.create(:comment, item:, user: alice)
+
+    sign_in alice
+    visit item_path(item)
+
+    within "#comment_#{comment.id}" do
+      expect(page).to have_content 'テストコメントです'
+      click_link '編集'
+      fill_in 'comment[content]', with: '編集しようとしたテストコメント'
+      click_link 'キャンセル'
+      expect(page).to have_link '編集'
+    end
+
+    expect(comment.content).to eq 'テストコメントです'
+  end
 end
