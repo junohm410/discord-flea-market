@@ -27,9 +27,9 @@ class CommentsController < ApplicationController
 
   def destroy
     comment = current_user.comments.find(params[:id])
-    item = comment.item
     comment.destroy!
-    redirect_to item, notice: 'コメントを削除しました', status: :see_other
+    flash.now[:notice] = 'コメントを削除しました'
+    render partial: 'items/comment_destroy', locals: { comment: }
   end
 
   private
