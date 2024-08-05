@@ -1,7 +1,7 @@
 .comment-container
   h2.my-5.text-xl.font-medium
     | コメント(
-    span#comments_count = item.comments.count
+    span#comments_count = item.comments.size
     | )
   ul#comments
     - if (comments = item.comments.order(:id).includes(:user).presence)
