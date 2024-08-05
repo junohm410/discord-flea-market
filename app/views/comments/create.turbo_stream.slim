@@ -1,5 +1,4 @@
-= turbo_stream.append 'comments'
-  = render 'comment', comment: @comment, item: @comment.item
+= turbo_stream.append 'comments', @comment
 = turbo_stream.replace 'new_comment'
   = render 'comments/form', comment: @comment.item.comments.build
 = turbo_stream.update 'comments_count', @comment.item.comments.count

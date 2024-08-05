@@ -5,6 +5,6 @@
     | )
   ul#comments
     - if (comments = item.comments.order(:id).includes(:user).presence)
-      = render partial: 'comments/comment', collection: comments, as: :comment, locals: { item: }
+      = render partial: 'comments/comment', collection: comments, as: :comment
 
   = render 'comments/form', comment: item.comments.build
