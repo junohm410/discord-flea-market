@@ -10,9 +10,11 @@ RSpec.describe 'Comments', type: :system do
     sign_in alice
     visit item_path(item)
 
+    expect(page).to have_content 'コメント(0)'
     fill_in 'comment[content]', with: 'テストコメント'
     click_button 'コメントする'
     expect(page).to have_content 'コメントを投稿しました'
+    expect(page).to have_content 'コメント(1)'
 
     within "#comment_#{item.comments.first.id}" do
       expect(page).to have_content 'テストコメント'
@@ -28,6 +30,7 @@ RSpec.describe 'Comments', type: :system do
         click_button '削除'
       end
       expect(page).to have_content 'コメントを削除しました'
+      expect(page).to have_content 'コメント(0)'
     end.to change(Comment, :count).by(-1)
 
     within '.comment-container' do
@@ -62,6 +65,7 @@ RSpec.describe 'Comments', type: :system do
     sign_in alice
     visit item_path(item)
 
+    expect(page).to have_content 'コメント(1)'
     within "#comment_#{comment.id}" do
       expect(page).to have_content 'テストコメントです'
       click_link '編集'
@@ -71,5 +75,6 @@ RSpec.describe 'Comments', type: :system do
     end
 
     expect(comment.content).to eq 'テストコメントです'
+    expect(page).to have_content 'コメント(1)'
   end
 end
