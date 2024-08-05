@@ -1,0 +1,19 @@
+= turbo_frame_tag comment
+  - if comment.errors.any?
+    #error_explanation.bg-red-50.text-red-500.px-3.py-2.font-medium.rounded-lg.mt-3
+      h2
+        = pluralize(comment.errors.count, 'error')
+        |  prohibited this comment from being saved:
+      ul
+        - comment.errors.each do |error|
+          li
+            = error.full_message
+
+  = form_with(model: [comment.item, comment], class: 'mt-5') do |form|
+    .my-5
+      = form.label :content, '商品へのコメント'
+      = form.text_area :content, rows: 4, required: true, placeholder: 'ページに書き込みはありますか？', class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+    .flex
+      - submit_label = comment.new_record? ? 'コメントする' : '更新'
+      = form.submit submit_label, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium cursor-pointer'
+      = link_to 'キャンセル', comment.item, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium' if comment.persisted?
