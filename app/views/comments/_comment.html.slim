@@ -1,9 +1,11 @@
 = turbo_frame_tag comment
-  li.my-5
-    = comment.content
-    small.block
-      | #{comment.user.name} - #{comment.created_at}
+  li.mt-3
+    = simple_format comment.content
+    small.block.mt-2
+      - avatar_url = comment.user.avatar_url.present? ? comment.user.avatar_url : 'https://cdn.discordapp.com/embed/avatars/0.png'
+      = image_tag(avatar_url, class: 'inline w-6 h-6 rounded-full mr-2')
+      | #{comment.user.name}さん - #{comment.created_at}
       - if comment.user == current_user
-        .flex
+        .flex.gap-1
           = link_to '編集', edit_item_comment_path(comment.item, comment), class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'
           = button_to '削除', item_comment_path(comment.item, comment), method: :delete, class: 'mt-1 rounded-lg py-1 px-3 bg-gray-100 font-medium'
