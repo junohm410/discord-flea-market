@@ -19,8 +19,8 @@ class Item < ApplicationRecord
   validate :price_cannot_be_changed_when_listed, on: :update
 
   scope :accessible_for, ->(user) { where(user:).or(not_unpublished) }
-  scope :editable, -> { listed.where('deadline >= ?', Time.current.beginning_of_day).or(unpublished) }
-  scope :closed_yesterday, -> { listed.where('deadline < ?', Time.current.beginning_of_day) }
+  scope :editable, -> { listed.where('deadline >= ?', Time.zone.today).or(unpublished) }
+  scope :closed_yesterday, -> { listed.where('deadline < ?', Time.zone.today) }
 
   def changed_to_listed_from_unpublished?
     saved_change_to_status == %w[unpublished listed]
@@ -33,7 +33,7 @@ class Item < ApplicationRecord
   private
 
   def deadline_later_than_today
-    return if deadline.present? && deadline >= Time.current.beginning_of_day
+    return if deadline.present? && deadline >= Time.zone.today
 
     errors.add(:deadline, "can't be earlier than today")
   end

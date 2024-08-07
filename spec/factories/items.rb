@@ -7,7 +7,7 @@ FactoryBot.define do
     price { 1000 }
     shipping_cost_covered { true }
     payment_method { 'PayPay' }
-    deadline { Time.current.tomorrow.beginning_of_day }
+    deadline { Time.zone.tomorrow }
     user { nil }
     status { 0 }
 
@@ -25,7 +25,7 @@ FactoryBot.define do
 
     factory :closed_yesterday_and_waiting_for_the_lottery_item do
       name { '昨日締め切りかつ抽選前の商品' }
-      deadline { Time.current.yesterday.beginning_of_day }
+      deadline { Time.zone.yesterday }
 
       to_create { |instance| instance.save(validate: false) }
     end
@@ -33,7 +33,7 @@ FactoryBot.define do
     factory :deadline_passed_once_and_not_buyer_selected_item do
       name { '一度締切が過ぎて、かつ購入者がつかなかった商品' }
       status { 1 }
-      deadline { Time.current.yesterday.beginning_of_day }
+      deadline { Time.zone.yesterday }
 
       to_create { |instance| instance.save(validate: false) }
     end

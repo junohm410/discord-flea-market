@@ -17,7 +17,7 @@ RSpec.describe 'Items', type: :system do
       fill_in 'Description', with: 'テスト商品です'
       check 'Shipping cost covered'
       fill_in 'Payment method', with: 'PayPay'
-      fill_in 'Deadline', with: Time.current.tomorrow
+      fill_in 'Deadline', with: Time.zone.tomorrow
       attach_file 'Images', [
         Rails.root.join('spec/files/book.png'),
         Rails.root.join('spec/files/books.png')
@@ -39,7 +39,7 @@ RSpec.describe 'Items', type: :system do
       fill_in 'Price', with: 1000
       check 'Shipping cost covered'
       fill_in 'Payment method', with: 'PayPay'
-      fill_in 'Deadline', with: Time.current.tomorrow
+      fill_in 'Deadline', with: Time.zone.tomorrow
       click_on '非公開として保存'
       expect(page).to have_content 'Item was successfully created.'
       expect(page).to have_content 'この商品は非公開です'
@@ -141,7 +141,7 @@ RSpec.describe 'Items', type: :system do
         visit item_path(target_item)
         click_on 'Edit this item'
         fill_in 'Name', with: '再出品商品'
-        fill_in 'Deadline', with: Time.current.tomorrow
+        fill_in 'Deadline', with: Time.zone.tomorrow
         click_on '出品する'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).to have_content '再出品商品'
