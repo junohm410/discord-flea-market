@@ -5,22 +5,22 @@
       | 自分の商品一覧
   .flex.items-center.mt-3
     = link_to 'すべて', listed_items_path, class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
-    = link_to '出品中', listed_items_path(status: 'listed'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
-    = link_to '購入者確定', listed_items_path(status: 'buyer_selected'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
-    = link_to '非公開', listed_items_path(status: 'unpublished'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to Item.human_attribute_name('status.listed'), listed_items_path(status: 'listed'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to Item.human_attribute_name('status.buyer_selected'), listed_items_path(status: 'buyer_selected'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+    = link_to Item.human_attribute_name('status.unpublished'), listed_items_path(status: 'unpublished'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
   #items.min-w-full
     - @items.each do |item|
       div id="listed_item_container_#{item.id}"
         - case item.status
         - when 'listed'
           p.mt-3.bg-blue-600.text-white.py-1.px-2.rounded-lg.inline-block
-            | 出品中
+            = Item.human_attribute_name('status.listed')
         - when 'unpublished'
           p.mt-3.bg-gray-300.text-gray-800.py-1.px-2.rounded-lg.inline-block
-            | 非公開
+            = Item.human_attribute_name('status.unpublished')
         - when 'buyer_selected'
           p.mt-3.bg-yellow-300.text-yellow-800.py-1.px-2.rounded-lg.inline-block
-            | 購入者確定
+            = Item.human_attribute_name('status.buyer_selected')
         .my-5.w-1/6
           - if item.images.attached?
             = image_tag item.images.includes(:blob).first.variant(resize_to_limit: [200, 200])

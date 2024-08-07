@@ -1,12 +1,60 @@
 ---
 ja:
   activerecord:
+    models:
+      comment: コメント
+      item: 商品
+      purchase_request: 購入希望
+      user: ユーザー
+
+    attributes:
+      comment:
+        content: 本文
+        item: :activerecord.models.item
+        user: :activerecord.models.user
+
+      item:
+        buyer: 購入者
+        comments: コメント
+        deadline: 購入希望の締切日
+        description: 商品の説明
+        images_attachments: 画像の添付ファイル
+        images_blobs: 画像のブロブ
+        name: 商品名
+        payment_method: 希望する支払方法
+        price: 価格
+        purchase_requests: 購入希望
+        requesting_users: 購入希望を出したユーザー
+        shipping_cost_covered: 送料の負担
+        status: 状態
+        user: :activerecord.models.user
+        images: 商品画像
+      item/status:
+        listed: 出品中
+        unpublished: 非公開
+        buyer_selected: 購入者確定
+
+      purchase_request:
+        item: :activerecord.models.item
+        user: :activerecord.models.user
+
+      user:
+        avatar_url: アバターのURL
+        buyable_items: 購入者となった商品
+        comments: コメント
+        items: 出品商品
+        name: 名前
+        provider: プロバイダー
+        purchase_requests: 購入希望
+        requested_items: 購入希望を出した商品
+        uid: uid
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+
   date:
     abbr_day_names:
     - 日
@@ -17,7 +65,7 @@ ja:
     - 金
     - 土
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -43,7 +91,7 @@ ja:
       long: "%Y年%m月%d日(%a)"
       short: "%m/%d"
     month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -124,12 +172,12 @@ ja:
     currency:
       format:
         delimiter: ","
-        format: "%n%u"
+        format: "%u%n"
         precision: 0
         separator: "."
         significant: false
         strip_insignificant_zeros: false
-        unit: 円
+        unit: ¥
     format:
       delimiter: ","
       precision: 3

@@ -23,8 +23,8 @@ class EmbedMessageFormatter
 
   def item_field
     {
-      price: @item.price,
-      deadline: @item.deadline,
+      price: ActiveSupport::NumberHelper.number_to_currency(@item.price),
+      deadline: I18n.l(@item.deadline),
       shipping: @item.shipping_cost_covered ? '出品者' : '購入者',
       payment: @item.payment_method
     }
