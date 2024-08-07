@@ -14,7 +14,7 @@ RSpec.describe 'Users', type: :system do
   it 'can sign in' do
     visit root_path
     click_on 'Discordでログイン'
-    expect(page).to have_content 'Successfully authenticated from Discord account.'
+    expect(page).to have_content 'Discord アカウントによる認証に成功しました。'
     expect(page).to have_content '現在出品されている商品一覧'
   end
 

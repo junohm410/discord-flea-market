@@ -12,13 +12,13 @@ RSpec.describe 'Items', type: :system do
       sign_in alice
       visit items_path
       click_on 'New item'
-      fill_in 'Name', with: 'テスト商品'
-      fill_in 'Price', with: 1000
-      fill_in 'Description', with: 'テスト商品です'
-      check 'Shipping cost covered'
-      fill_in 'Payment method', with: 'PayPay'
-      fill_in 'Deadline', with: Time.zone.tomorrow
-      attach_file 'Images', [
+      fill_in '商品名', with: 'テスト商品'
+      fill_in '価格', with: 1000
+      fill_in '商品の説明', with: 'テスト商品です'
+      check '送料の負担'
+      fill_in '希望する支払方法', with: 'PayPay'
+      fill_in '購入希望の締切日', with: Time.zone.tomorrow
+      attach_file '商品画像', [
         Rails.root.join('spec/files/book.png'),
         Rails.root.join('spec/files/books.png')
       ]
@@ -34,12 +34,12 @@ RSpec.describe 'Items', type: :system do
       sign_in alice
       visit items_path
       click_on 'New item'
-      fill_in 'Name', with: '非公開商品'
-      fill_in 'Description', with: '非公開商品です'
-      fill_in 'Price', with: 1000
-      check 'Shipping cost covered'
-      fill_in 'Payment method', with: 'PayPay'
-      fill_in 'Deadline', with: Time.zone.tomorrow
+      fill_in '商品名', with: '非公開商品'
+      fill_in '商品の説明', with: '非公開商品です'
+      fill_in '価格', with: 1000
+      check '送料の負担'
+      fill_in '希望する支払方法', with: 'PayPay'
+      fill_in '購入希望の締切日', with: Time.zone.tomorrow
       click_on '非公開として保存'
       expect(page).to have_content 'Item was successfully created.'
       expect(page).to have_content 'この商品は非公開です'
@@ -55,7 +55,7 @@ RSpec.describe 'Items', type: :system do
         sign_in alice
         visit item_path(item)
         click_on 'Edit this item'
-        fill_in 'Name', with: '編集済み商品'
+        fill_in '商品名', with: '編集済み商品'
         click_on '出品する'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).to have_content '編集済み商品'
@@ -119,18 +119,18 @@ RSpec.describe 'Items', type: :system do
         visit item_path(item)
         click_on 'Edit this item'
         expect(page).to have_content '※この商品は出品中です。一度出品した商品の価格は、出品中は変更できません。'
-        expect(page).to have_field 'Price', readonly: true
+        expect(page).to have_field '価格', readonly: true
       end
 
       it 'user can change price of an unpublished item' do
         sign_in alice
         visit item_path(unpublished_item)
         click_on 'Edit this item'
-        expect(page).to have_field 'Price', readonly: false
-        fill_in 'Price', with: 2000
+        expect(page).to have_field '価格', readonly: false
+        fill_in '価格', with: 2000
         click_on '出品する'
         expect(page).to have_content 'Item was successfully updated.'
-        expect(page).to have_content '2000'
+        expect(page).to have_content '¥2,000'
       end
     end
 
@@ -140,8 +140,8 @@ RSpec.describe 'Items', type: :system do
         sign_in alice
         visit item_path(target_item)
         click_on 'Edit this item'
-        fill_in 'Name', with: '再出品商品'
-        fill_in 'Deadline', with: Time.zone.tomorrow
+        fill_in '商品名', with: '再出品商品'
+        fill_in '購入希望の締切日', with: Time.zone.tomorrow
         click_on '出品する'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).to have_content '再出品商品'
