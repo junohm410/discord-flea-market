@@ -35,8 +35,8 @@ RSpec.describe Item, type: :model do
   describe '.closed_yesterday' do
     it 'only returns listed items whose deadline is yesterday' do
       closed_yesterday_item = FactoryBot.create(:closed_yesterday_and_waiting_for_the_lottery_item, user: alice)
-      FactoryBot.create(:item, user: alice, deadline: Time.current.beginning_of_day)
-      FactoryBot.create(:item, user: alice, deadline: Time.current.tomorrow)
+      FactoryBot.create(:item, user: alice, deadline: Time.zone.today)
+      FactoryBot.create(:item, user: alice, deadline: Time.zone.tomorrow)
       FactoryBot.create(:buyer_selected_item, user: alice)
       FactoryBot.create(:unpublished_item, user: alice)
 
@@ -46,19 +46,19 @@ RSpec.describe Item, type: :model do
 
   describe 'validate deadline_later_than_today' do
     it "validates that the deadline can't be earlier than today" do
-      item = FactoryBot.build(:item, user: alice, deadline: Time.current.yesterday)
+      item = FactoryBot.build(:item, user: alice, deadline: Time.zone.yesterday)
       item.valid?
       expect(item.errors[:deadline]).to include "can't be earlier than today"
     end
 
     it 'validates that the deadline can be later than today' do
-      item = FactoryBot.build(:item, user: alice, deadline: Time.current.tomorrow)
+      item = FactoryBot.build(:item, user: alice, deadline: Time.zone.tomorrow)
       item.valid?
       expect(item.errors[:deadline]).to be_empty
     end
 
     it 'validates that the deadline can be beginning of today' do
-      item = FactoryBot.build(:item, user: alice, deadline: Time.current.beginning_of_day)
+      item = FactoryBot.build(:item, user: alice, deadline: Time.zone.today)
       item.valid?
       expect(item.errors[:deadline]).to be_empty
     end
