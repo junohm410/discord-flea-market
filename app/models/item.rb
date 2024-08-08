@@ -22,6 +22,8 @@ class Item < ApplicationRecord
   scope :editable, -> { listed.where('deadline >= ?', Time.zone.today).or(unpublished) }
   scope :closed_yesterday, -> { listed.where('deadline < ?', Time.zone.today) }
 
+  paginates_per 10
+
   def changed_to_listed_from_unpublished?
     saved_change_to_status == %w[unpublished listed]
   end
