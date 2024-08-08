@@ -1,9 +1,7 @@
 = turbo_frame_tag comment
   - if comment.errors.any?
     #error_explanation.bg-red-50.text-red-500.px-3.py-2.font-medium.rounded-lg.mt-3
-      h2
-        = pluralize(comment.errors.count, 'error')
-        |  prohibited this comment from being saved:
+      h2 = t('errors.template.header', model: comment.model_name.human, count: comment.errors.count)
       ul
         - comment.errors.each do |error|
           li

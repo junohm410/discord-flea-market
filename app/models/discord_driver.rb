@@ -26,10 +26,10 @@ class DiscordDriver
       embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(**embed_message[:thumbnail])
       embed.author = Discordrb::Webhooks::EmbedAuthor.new(**embed_message[:author])
 
-      embed.add_field(name: '価格', value: item_field[:price])
-      embed.add_field(name: '購入希望の締切日', value: item_field[:deadline])
-      embed.add_field(name: '配送料の負担', value: item_field[:shipping], inline: true)
-      embed.add_field(name: '希望する支払い方法', value: item_field[:payment], inline: true)
+      embed.add_field(name: Item.human_attribute_name(:price), value: item_field[:price])
+      embed.add_field(name: Item.human_attribute_name(:deadline), value: item_field[:deadline])
+      embed.add_field(name: Item.human_attribute_name(:shipping_cost_covered), value: item_field[:shipping], inline: true)
+      embed.add_field(name: Item.human_attribute_name(:payment_method), value: item_field[:payment], inline: true)
     end
   end
 end

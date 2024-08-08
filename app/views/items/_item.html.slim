@@ -4,13 +4,13 @@ div id="#{dom_id item}"
   .mt-3
     .flex.items-center
       p.text-4xl.font-medium.text-gray-800
-        = item.price
+        = number_to_currency item.price
       .flex.flex-col.ml-3
         p.text-gray-600.text-sm
-          span 送料:
-          = item.shipping_cost_covered ? '出品者が負担' : '購入者が負担'
+          span = "#{Item.human_attribute_name(:shipping_cost_covered)}: "
+          = item.shipping_cost_covered ? '出品者' : '購入者'
         p.text-gray-600.text-sm
-          span 希望の支払い方法:
+          span = "#{Item.human_attribute_name(:payment_method)}: "
           = item.payment_method
   .mt-3
     p.font-medium
@@ -19,12 +19,12 @@ div id="#{dom_id item}"
       | #{item.user.name} さんの出品
   .mt-5
     h3.text-lg.font-semibold.text-gray-800
-      | 商品の説明
+      = Item.human_attribute_name(:description)
     = simple_format item.description, class: 'mt-2'
   .mt-5
     p.text-gray-600
-      span 購入希望の締切日:
-      = item.deadline
+      span = "購入希望数: "
+      = item.purchase_requests.size
     p.text-gray-600
-      span 現在の購入希望数:
-      | #{item.purchase_requests.size}
+      span = "#{Item.human_attribute_name(:deadline)}: "
+      = l item.deadline
