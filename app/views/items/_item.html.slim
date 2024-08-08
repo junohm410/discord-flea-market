@@ -14,7 +14,7 @@ div id="#{dom_id item}"
           = item.payment_method
   .mt-3
     p.font-medium
-      - avatar_url = item.user.avatar_url.present? ? item.user.avatar_url : 'https://cdn.discordapp.com/embed/avatars/0.png'
+      - avatar_url = item.user.avatar_url.presence || 'https://cdn.discordapp.com/embed/avatars/0.png'
       = image_tag(avatar_url, class: 'inline-block mr-2 w-8 h-8 rounded-full')
       | #{item.user.name} さんの出品
   .mt-5
@@ -23,7 +23,7 @@ div id="#{dom_id item}"
     = simple_format item.description, class: 'mt-2'
   .mt-5
     p.text-gray-600
-      span = "購入希望数: "
+      span = '購入希望数: '
       = item.purchase_requests.size
     p.text-gray-600
       span = "#{Item.human_attribute_name(:deadline)}: "
