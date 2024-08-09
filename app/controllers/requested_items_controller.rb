@@ -13,6 +13,6 @@ class RequestedItemsController < ApplicationController
         items.buyer_selected.where.not(buyer: current_user).includes(:user, :buyer, :images_attachments)
       else
         items.includes(:user, :buyer, :images_attachments)
-      end
+      end.order(id: :desc).page(params[:page])
   end
 end

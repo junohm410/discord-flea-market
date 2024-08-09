@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
 
   # GET /items
   def index
-    @items = Item.listed.includes(:user, :images_attachments)
+    @items = Item.listed.includes(:user, :images_attachments).order(id: :desc).page(params[:page])
   end
 
   # GET /items/1

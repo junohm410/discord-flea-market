@@ -13,6 +13,6 @@ class ListedItemsController < ApplicationController
         items.buyer_selected.includes(:images_attachments)
       else
         items.includes(:images_attachments)
-      end
+      end.order(id: :desc).page(params[:page])
   end
 end

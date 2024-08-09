@@ -15,3 +15,6 @@
         = render item
         p
           = link_to '商品の詳細', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+
+  .mt-5
+    = paginate @items
