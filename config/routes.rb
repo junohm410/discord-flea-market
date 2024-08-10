@@ -15,5 +15,7 @@ Rails.application.routes.draw do
     root to: "items#index", as: :authenticated_root
   end
 
+  get '/withdraw', to: 'withdrawals#new'
+
   root to: "welcome#index"
 end
