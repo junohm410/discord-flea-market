@@ -16,6 +16,10 @@ RSpec.describe User, type: :model do
       }
     end
 
+    before do
+      stub_request(:get, "#{Discordrb::API.api_base}/guilds/#{ENV['DISCORD_SERVER_ID']}/members/#{uid}")
+    end
+
     context 'when the user is new' do
       it 'creates and returns a new user' do
         user = User.find_or_create_from_auth_hash!(auth_hash)
