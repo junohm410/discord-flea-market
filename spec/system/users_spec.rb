@@ -28,6 +28,18 @@ RSpec.describe 'Users', type: :system do
     expect(page).to have_content 'Discordでログイン'
   end
 
+  it 'can withdraw from this app' do
+    sign_in user
+    visit items_path
+    click_on 'Menu'
+    click_on '退会する'
+    expect(page).to have_selector('h1', text: '退会')
+    expect do
+      page.accept_confirm { click_on '退会する' }
+      expect(page).to have_content '退会しました'
+    end.to change(User, :count).by(-1)
+  end
+
   private
 
   def discord_mock
