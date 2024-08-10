@@ -76,4 +76,6 @@ RSpec.configure do |config|
       path.rmtree if path.directory?
     end
   end
+
+  WebMock.allow_net_connect!
 end

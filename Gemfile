@@ -78,6 +78,7 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'slim_lint', require: false
+  gem 'webmock'
   gem 'whenever', require: false
 end
 
