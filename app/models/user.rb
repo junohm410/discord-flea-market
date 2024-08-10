@@ -19,6 +19,9 @@ class User < ApplicationRecord
     name = auth_hash[:info][:name]
     avatar_url = auth_hash[:info][:image]
 
+    # サーバーメンバーではない場合リクエストに失敗してログインできない
+    Discordrb::API::Server.resolve_member("Bot #{ENV['DISCORD_BOT_TOKEN']}", ENV['DISCORD_SERVER_ID'], uid)
+
     User.find_or_create_by!(provider:, uid:) do |user|
       user.name = name
       user.avatar_url = avatar_url

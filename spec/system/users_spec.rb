@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Users', type: :system do
   let(:user) { FactoryBot.create(:user) }
+  let(:uid) { '1234567' }
 
   before do
     OmniAuth.config.test_mode = true
@@ -12,6 +13,8 @@ RSpec.describe 'Users', type: :system do
   end
 
   it 'can sign in' do
+    stub_request(:get, "#{Discordrb::API.api_base}/guilds/#{ENV['DISCORD_SERVER_ID']}/members/#{uid}")
+
     visit root_path
     click_on 'Discordでログイン'
     expect(page).to have_content 'Discord アカウントによる認証に成功しました。'
@@ -22,7 +25,6 @@ RSpec.describe 'Users', type: :system do
     sign_in user
     visit items_path
     click_on 'Menu'
-    take_screenshot
     click_on 'ログアウト'
     expect(page).to have_content 'Welcome'
     expect(page).to have_content 'Discordでログイン'
@@ -45,7 +47,7 @@ RSpec.describe 'Users', type: :system do
   def discord_mock
     auth_hash = {
       provider: 'discord',
-      uid: '1234567',
+      uid:,
       info: {
         name: 'alice',
         image: 'https://cdn.discordapp.com/embed/avatars/1.png'
