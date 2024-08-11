@@ -48,4 +48,15 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '.remove_by_member_leaving_event' do
+    it 'deletes the user by an event that the user leaves a specific server' do
+      alice = FactoryBot.create(:user)
+      # Structを使って、ユーザーが指定のサーバーから退出したというイベントオブジェクトをモックする
+      user = Struct.new('UserData', :id).new(alice.uid)
+      event = Struct.new('EventData', :user).new(user)
+      expect { User.remove_by_member_leaving_event(event) }.to change(User, :count).by(-1)
+      expect(User.find_by(uid: alice.uid)).to be_nil
+    end
+  end
 end
