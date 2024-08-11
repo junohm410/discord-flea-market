@@ -18,25 +18,7 @@ class DiscordBot
     end
 
     @bot.member_update do |event|
-      uid = event.user.id
-      updated_member = JSON.parse(Discordrb::API::User.resolve("Bot #{ENV['DISCORD_BOT_TOKEN']}", uid))
-
-      name = updated_member['username']
-      avatar_url = avatar_url(uid, updated_member['avatar'])
-
-      user = User.find_by(uid:)
-      if user
-        user.update!(name:) if user.name != name
-        user.update!(avatar_url:) if user.avatar_url != avatar_url
-      end
-    end
-  end
-
-  def avatar_url(uid, avatar_id)
-    if avatar_id
-      Discordrb::API::User.avatar_url(uid, avatar_id)
-    else
-      Discordrb::API::User.default_avatar
+      User.update_by_member_updating_event(event)
     end
   end
 end

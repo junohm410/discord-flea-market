@@ -24,11 +24,7 @@ class User < ApplicationRecord
 
     User.find_or_create_by!(provider:, uid:) do |user|
       user.name = name
-      user.avatar_url = if avatar
-                          Discordrb::API::User.avatar_url(uid, avatar)
-                        else
-                          Discordrb::API::User.default_avatar
-                        end
+      user.avatar_url = avatar ? Discordrb::API::User.avatar_url(uid, avatar) : Discordrb::API::User.default_avatar
     end
   end
 
@@ -36,5 +32,20 @@ class User < ApplicationRecord
     uid = event.user.id
     user = find_by(uid:)
     user&.destroy
+  end
+
+  def self.update_by_member_updating_event(event)
+    uid = event.user.id
+    updated_member = JSON.parse(Discordrb::API::User.resolve("Bot #{ENV['DISCORD_BOT_TOKEN']}", uid))
+
+    name = updated_member['username']
+    avatar = updated_member['avatar']
+    avatar_url = avatar ? Discordrb::API::User.avatar_url(uid, avatar) : Discordrb::API::User.default_avatar
+
+    user = User.find_by(uid:)
+    return unless user
+
+    user.update!(name:) if user.name != name
+    user.update!(avatar_url:) if user.avatar_url != avatar_url
   end
 end
