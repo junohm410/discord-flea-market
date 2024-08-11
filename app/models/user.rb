@@ -27,4 +27,10 @@ class User < ApplicationRecord
       user.avatar_url = avatar_url
     end
   end
+
+  def self.remove_by_member_leaving_event(event)
+    uid = event.user.id
+    user = find_by(uid:)
+    user&.destroy
+  end
 end
