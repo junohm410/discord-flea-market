@@ -10,8 +10,12 @@ RSpec.describe User, type: :model do
         provider: 'discord',
         uid:,
         info: {
-          name: 'bob',
-          image: 'https://cdn.discordapp.com/embed/avatars/1.png'
+          name: 'bob'
+        },
+        extra: {
+          raw_info: {
+            avatar: nil
+          }
         }
       }
     end
@@ -26,7 +30,7 @@ RSpec.describe User, type: :model do
         expect(user.provider).to eq 'discord'
         expect(user.uid).to eq '2345678'
         expect(user.name).to eq 'bob'
-        expect(user.avatar_url).to eq 'https://cdn.discordapp.com/embed/avatars/1.png'
+        expect(user.avatar_url).to eq 'https://cdn.discordapp.com/embed/avatars/0.png'
         expect(User.find_or_create_from_auth_hash!(auth_hash)).to eq User.find_by(uid:)
       end
 

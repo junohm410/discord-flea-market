@@ -17,14 +17,18 @@ class User < ApplicationRecord
     provider = auth_hash[:provider]
     uid = auth_hash[:uid]
     name = auth_hash[:info][:name]
-    avatar_url = auth_hash[:info][:image]
+    avatar = auth_hash[:extra][:raw_info][:avatar]
 
     # サーバーメンバーではない場合リクエストに失敗してログインできない
     Discordrb::API::Server.resolve_member("Bot #{ENV['DISCORD_BOT_TOKEN']}", ENV['DISCORD_SERVER_ID'], uid)
 
     User.find_or_create_by!(provider:, uid:) do |user|
       user.name = name
-      user.avatar_url = avatar_url
+      user.avatar_url = if avatar
+                          Discordrb::API::User.avatar_url(uid, avatar)
+                        else
+                          Discordrb::API::User.default_avatar
+                        end
     end
   end
 
