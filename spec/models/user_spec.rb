@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe '#find_or_create_from_auth_hash!' do
+  describe '.find_or_create_from_auth_hash!' do
     let(:uid) { '2345678' }
     let(:auth_hash) do
       {
