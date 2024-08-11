@@ -14,8 +14,7 @@ div id="#{dom_id item}"
           = item.payment_method
   .mt-3
     p.font-medium
-      - avatar_url = item.user.avatar_url.presence || 'https://cdn.discordapp.com/embed/avatars/0.png'
-      = image_tag(avatar_url, class: 'inline-block mr-2 w-8 h-8 rounded-full')
+      = image_tag(item.user.avatar_url, class: 'inline-block mr-2 w-8 h-8 rounded-full')
       | #{item.user.name} さんの出品
   .mt-5
     h3.text-lg.font-semibold.text-gray-800
