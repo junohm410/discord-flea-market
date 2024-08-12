@@ -10,8 +10,12 @@ RSpec.describe User, type: :model do
         provider: 'discord',
         uid:,
         info: {
-          name: 'bob',
-          image: 'https://cdn.discordapp.com/embed/avatars/1.png'
+          name: 'bob'
+        },
+        extra: {
+          raw_info: {
+            avatar: nil
+          }
         }
       }
     end
@@ -26,7 +30,7 @@ RSpec.describe User, type: :model do
         expect(user.provider).to eq 'discord'
         expect(user.uid).to eq '2345678'
         expect(user.name).to eq 'bob'
-        expect(user.avatar_url).to eq 'https://cdn.discordapp.com/embed/avatars/1.png'
+        expect(user.avatar_url).to eq 'https://cdn.discordapp.com/embed/avatars/0.png'
         expect(User.find_or_create_from_auth_hash!(auth_hash)).to eq User.find_by(uid:)
       end
 
@@ -49,14 +53,34 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.remove_by_member_leaving_event' do
-    it 'deletes the user by an event that the user leaves a specific server' do
-      alice = FactoryBot.create(:user)
-      # Structを使って、ユーザーが指定のサーバーから退出したというイベントオブジェクトをモックする
-      user = Struct.new('UserData', :id).new(alice.uid)
-      event = Struct.new('EventData', :user).new(user)
-      expect { User.remove_by_member_leaving_event(event) }.to change(User, :count).by(-1)
-      expect(User.find_by(uid: alice.uid)).to be_nil
+  describe 'methods for handling user events' do
+    let(:alice) { FactoryBot.create(:user) }
+    let(:event_user_data) { instance_double(Discordrb::User) }
+
+    describe '.remove_by_member_leaving_event' do
+      it 'deletes the user by an event that the user leaves a specific server' do
+        allow(event_user_data).to receive(:id).and_return(alice.uid)
+        event = instance_double(Discordrb::Events::ServerMemberDeleteEvent)
+        allow(event).to receive(:user).and_return(event_user_data)
+
+        expect { User.remove_by_member_leaving_event(event) }.to change(User, :count).by(-1)
+        expect(User.find_by(uid: alice.uid)).to be_nil
+      end
+    end
+
+    describe '.update_by_member_updating_event' do
+      it 'updates the user by an event that the user updates the user information' do
+        allow(event_user_data).to receive(:id).and_return(alice.uid)
+        event = instance_double(Discordrb::Events::ServerMemberUpdateEvent)
+        allow(event).to receive(:user).and_return(event_user_data)
+        stub_request(:get, "#{Discordrb::API.api_base}/users/#{alice.uid}")
+          .to_return_json(body: { id: alice.uid, username: 'renamed_alice', avatar: '1234567' })
+
+        User.update_by_member_updating_event(event)
+        alice.reload
+        expect(alice.name).to eq 'renamed_alice'
+        expect(alice.avatar_url).to eq "https://cdn.discordapp.com/avatars/#{alice.uid}/1234567.webp"
+      end
     end
   end
 end

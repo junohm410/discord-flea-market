@@ -16,5 +16,9 @@ class DiscordBot
     @bot.member_leave do |event|
       User.remove_by_member_leaving_event(event)
     end
+
+    @bot.member_update do |event|
+      User.update_by_member_updating_event(event)
+    end
   end
 end

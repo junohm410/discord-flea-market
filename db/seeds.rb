@@ -7,7 +7,7 @@ UID_DIGITS = 19
     uid: format("%0#{UID_DIGITS}d", SecureRandom.random_number(10**UID_DIGITS)),
     name: "user#{n + 1}",
     provider: 'discord',
-    avatar_url: nil
+    avatar_url: 'https://cdn.discordapp.com/embed/avatars/0.png'
   )
 end
 

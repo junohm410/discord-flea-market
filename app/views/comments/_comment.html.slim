@@ -2,8 +2,7 @@
   li.mt-3
     = simple_format comment.content
     small.block.mt-2
-      - avatar_url = comment.user.avatar_url.presence || 'https://cdn.discordapp.com/embed/avatars/0.png'
-      = image_tag(avatar_url, class: 'inline w-6 h-6 rounded-full mr-2')
+      = image_tag(comment.user.avatar_url, class: 'inline w-6 h-6 rounded-full mr-2')
       | #{comment.user.name}さん - #{l(comment.created_at, format: :long)}
       - if comment.user == current_user
         .flex.gap-1

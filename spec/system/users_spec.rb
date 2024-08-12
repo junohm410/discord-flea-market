@@ -49,8 +49,12 @@ RSpec.describe 'Users', type: :system do
       provider: 'discord',
       uid:,
       info: {
-        name: 'alice',
-        image: 'https://cdn.discordapp.com/embed/avatars/1.png'
+        name: 'alice'
+      },
+      extra: {
+        raw_info: {
+          avatar: nil
+        }
       }
     }
     OmniAuth::AuthHash.new(auth_hash)
