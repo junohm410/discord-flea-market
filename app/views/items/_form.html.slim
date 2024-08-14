@@ -47,4 +47,5 @@
   .inline
     = form.submit '非公開として保存', class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium cursor-pointer'
   .inline
-    = form.submit '出品する', class: 'ml-2 rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer'
+    - list_buttons_label = item.persisted? && item.listed? ? '変更する' : '出品する'
+    = form.submit list_buttons_label, class: 'ml-2 rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer'

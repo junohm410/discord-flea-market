@@ -56,7 +56,7 @@ RSpec.describe 'Items', type: :system do
         visit item_path(item)
         click_on '商品を編集する'
         fill_in '商品名', with: '編集済み商品'
-        click_on '出品する'
+        click_on '変更する'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).to have_content '編集済み商品'
       end
@@ -73,7 +73,7 @@ RSpec.describe 'Items', type: :system do
           expect(page).to have_selector("img[src$='book.png']")
           expect(page).to have_selector("img[src$='books.png']")
           find("img[src$='book.png']").click
-          click_on '出品する'
+          click_on '変更する'
           expect(page).to have_content 'Item was successfully updated.'
         end.to change { item.images.count }.from(2).to(1)
         expect(page).to have_selector("img[src$='books.png']")
