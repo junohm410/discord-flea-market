@@ -61,6 +61,27 @@ RSpec.describe 'Items', type: :system do
         expect(page).to have_content '編集済み商品'
       end
 
+      it 'user can select and delete already existing item images' do
+        item = FactoryBot.create(:item, user: alice)
+        item.images.attach(io: File.open(Rails.root.join('spec/files/book.png')), filename: 'book.png')
+        item.images.attach(io: File.open(Rails.root.join('spec/files/books.png')), filename: 'books.png')
+
+        sign_in alice
+        visit item_path(item)
+        click_on '商品を編集する'
+        expect do
+          expect(page).to have_selector("img[src$='book.png']")
+          expect(page).to have_selector("img[src$='books.png']")
+          find("img[src$='book.png']").click
+          click_on '出品する'
+          expect(page).to have_content 'Item was successfully updated.'
+        end.to change { item.images.count }.from(2).to(1)
+        expect(page).to have_selector("img[src$='books.png']")
+        click_on '商品を編集する'
+        expect(page).not_to have_selector("img[src$='book.png']")
+        expect(page).to have_selector("img[src$='books.png']")
+      end
+
       it 'user can destroy their own item' do
         sign_in alice
         visit item_path(item)
