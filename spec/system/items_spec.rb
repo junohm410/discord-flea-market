@@ -44,6 +44,21 @@ RSpec.describe 'Items', type: :system do
       expect(page).to have_content 'Item was successfully created.'
       expect(page).to have_content 'この商品は非公開です'
     end
+
+    context 'when validation errors occur in non-image columns while attaching images' do
+      it 'user can see an edit form again with messages about validation errors' do
+        sign_in alice
+        visit new_item_path
+        fill_in '価格', with: 1000
+        fill_in '商品の説明', with: 'テスト商品です'
+        fill_in '購入希望の締切日', with: Time.zone.tomorrow
+        attach_file '商品画像', [
+          Rails.root.join('spec/files/book.png')
+        ]
+        expect { click_on '出品する' }.not_to raise_error
+        expect(page).to have_content '商品名を入力してください'
+      end
+    end
   end
 
   describe 'editing and destroying items' do
