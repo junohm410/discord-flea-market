@@ -15,6 +15,11 @@ class Item < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :shipping_cost_covered, inclusion: { in: [true, false] }
   validates :deadline, presence: true
+  validates :images,
+            content_type: %i[png jpg jpeg heic heif],
+            limit: { max: 5, message: 'の枚数は5枚以下にしてください' },
+            size: { less_than: 6.megabytes },
+            processable_image: true
   validate :deadline_later_than_today, unless: -> { validation_context == :select_buyer }
   validate :price_cannot_be_changed_when_listed, on: :update
 

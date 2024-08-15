@@ -47,6 +47,7 @@ gem 'bootsnap', require: false
 gem 'image_processing', '~> 1.2'
 
 gem 'active_delivery', '~> 1.0'
+gem 'active_storage_validations'
 gem 'any_login'
 gem 'devise'
 gem 'discordrb'
