@@ -7,7 +7,7 @@ class DiscordNotifier < AbstractNotifier::Base
     params.merge!(@params)
     item = params[:item]
 
-    embed_message = EmbedMessageFormatter.new(item).format_embed_message
+    embed_message = EmbedMessageFormatter.new(item).execute
 
     notification(
       body: '新しい商品が出品されました！',
@@ -25,7 +25,7 @@ class DiscordNotifier < AbstractNotifier::Base
       CC: #{no_selected_users.map { |user| "<@#{user.uid}> さん" }.join(', ')}
     TEXT
 
-    embed_message = EmbedMessageFormatter.new(item).format_embed_message
+    embed_message = EmbedMessageFormatter.new(item).execute
 
     notification(
       body:,

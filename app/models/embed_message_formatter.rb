@@ -6,7 +6,7 @@ class EmbedMessageFormatter
     @user = item.user
   end
 
-  def format_embed_message
+  def execute
     {
       title: @item.name,
       url: Rails.application.routes.url_helpers.item_url(@item),
