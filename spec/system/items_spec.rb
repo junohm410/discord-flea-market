@@ -9,6 +9,8 @@ RSpec.describe 'Items', type: :system do
 
   describe 'listing items' do
     it 'user can list an item' do
+      expect(DiscordNotifier).to receive_message_chain(:with, :item_listed, :notify_now) # rubocop:disable RSpec/MessageChain
+
       sign_in alice
       visit items_path
       click_on '商品を出品する'
@@ -31,6 +33,9 @@ RSpec.describe 'Items', type: :system do
     end
 
     it 'user can save an item as unpublished' do
+      allow(DiscordNotifier).to receive(:with)
+      allow(DiscordNotifier).to receive(:item_listed)
+
       sign_in alice
       visit items_path
       click_on '商品を出品する'
@@ -43,6 +48,8 @@ RSpec.describe 'Items', type: :system do
       click_on '非公開として保存'
       expect(page).to have_content 'Item was successfully created.'
       expect(page).to have_content 'この商品は非公開です'
+      expect(DiscordNotifier).not_to have_received(:with)
+      expect(DiscordNotifier).not_to have_received(:item_listed)
     end
 
     context 'when validation errors occur in non-image columns while attaching images' do
@@ -66,6 +73,12 @@ RSpec.describe 'Items', type: :system do
     let(:unpublished_item) { FactoryBot.create(:unpublished_item, user: alice) }
 
     context 'when user owns their own item' do
+      before do
+        allow(DiscordNotifier).to receive(:with)
+        allow(DiscordNotifier).to receive(:item_listed)
+        allow(DiscordNotifier).to receive(:item_unlisted)
+      end
+
       it 'user can edit their own item' do
         sign_in alice
         visit item_path(item)
@@ -74,6 +87,8 @@ RSpec.describe 'Items', type: :system do
         click_on '変更する'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).to have_content '編集済み商品'
+        expect(DiscordNotifier).not_to have_received(:with)
+        expect(DiscordNotifier).not_to have_received(:item_listed)
       end
 
       it 'user can select and delete already existing item images' do
@@ -103,6 +118,8 @@ RSpec.describe 'Items', type: :system do
         click_on '商品を削除する'
         expect(page).to have_content 'Item was successfully destroyed.'
         expect(page).not_to have_content item.name
+        expect(DiscordNotifier).not_to have_received(:with)
+        expect(DiscordNotifier).not_to have_received(:item_unlisted)
       end
     end
 
@@ -117,6 +134,10 @@ RSpec.describe 'Items', type: :system do
 
     context 'when user edits items as unpublished' do
       it 'user can make a listed item unpublished' do
+        allow(DiscordNotifier).to receive(:with)
+        allow(DiscordNotifier).to receive(:item_listed)
+        allow(DiscordNotifier).to receive(:item_unlisted)
+
         sign_in alice
         visit item_path(item)
         expect(page).not_to have_content 'この商品は非公開です'
@@ -124,9 +145,14 @@ RSpec.describe 'Items', type: :system do
         click_on '非公開として保存'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).to have_content 'この商品は非公開です'
+        expect(DiscordNotifier).not_to have_received(:with)
+        expect(DiscordNotifier).not_to have_received(:item_listed)
+        expect(DiscordNotifier).not_to have_received(:item_unlisted)
       end
 
       it 'user can make an unpublished item listed' do
+        expect(DiscordNotifier).to receive_message_chain(:with, :item_listed, :notify_now) # rubocop:disable RSpec/MessageChain
+
         sign_in alice
         visit item_path(unpublished_item)
         expect(page).to have_content 'この商品は非公開です'
@@ -134,18 +160,6 @@ RSpec.describe 'Items', type: :system do
         click_on '出品する'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).not_to have_content 'この商品は非公開です'
-      end
-
-      it 'purchase requests are deleted when an item is made unpublished' do
-        FactoryBot.create(:purchase_request, item:, user: bob)
-        sign_in alice
-        visit item_path(item)
-        click_on '商品を編集する'
-        expect do
-          click_on '非公開として保存'
-          expect(page).to have_content 'Item was successfully updated.'
-          expect(page).to have_content 'この商品は非公開です'
-        end.to change { item.purchase_requests.count }.from(1).to(0)
       end
     end
 
@@ -172,6 +186,8 @@ RSpec.describe 'Items', type: :system do
 
     context 'when user wants to edit an unpublished item whose deadline has passed once and no one has been selected as a buyer' do
       it 'user can edit it and list it again' do
+        expect(DiscordNotifier).to receive_message_chain(:with, :item_listed, :notify_now) # rubocop:disable RSpec/MessageChain
+
         target_item = FactoryBot.create(:deadline_passed_once_and_not_buyer_selected_item, user: alice)
         sign_in alice
         visit item_path(target_item)
@@ -181,6 +197,43 @@ RSpec.describe 'Items', type: :system do
         click_on '出品する'
         expect(page).to have_content 'Item was successfully updated.'
         expect(page).to have_content '再出品商品'
+      end
+    end
+  end
+
+  describe 'editing and destroying items which have purchase requests' do
+    let(:item) { FactoryBot.create(:item, user: alice) }
+
+    before do
+      FactoryBot.create(:purchase_request, item:, user: bob)
+    end
+
+    context 'when user edits items as unpublished' do
+      it 'purchase requests are destroyed and notifications are sent' do
+        expect(DiscordNotifier).to receive_message_chain(:with, :item_unlisted, :notify_now) # rubocop:disable RSpec/MessageChain
+
+        sign_in alice
+        visit item_path(item)
+        click_on '商品を編集する'
+        expect do
+          click_on '非公開として保存'
+          expect(page).to have_content 'Item was successfully updated.'
+          expect(page).to have_content 'この商品は非公開です'
+        end.to change { item.purchase_requests.count }.from(1).to(0)
+      end
+    end
+
+    context 'when user destroy items' do
+      it 'purchase requests are also destroyed and notifications are sent' do
+        expect(DiscordNotifier).to receive_message_chain(:with, :item_unlisted, :notify_now) # rubocop:disable RSpec/MessageChain
+
+        sign_in alice
+        visit item_path(item)
+        expect do
+          click_on '商品を削除する'
+          expect(page).to have_content 'Item was successfully destroyed.'
+          expect(page).not_to have_content item.name
+        end.to change { item.purchase_requests.count }.from(1).to(0)
       end
     end
   end
