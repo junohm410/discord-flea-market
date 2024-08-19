@@ -33,3 +33,5 @@ jobs:
         run: bin/rails db:schema:load
       - name: Run tests
         run: bundle exec rspec
+        env:
+          DISCORD_WEBHOOK_URL: https://example.com/

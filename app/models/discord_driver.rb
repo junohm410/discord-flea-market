@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DiscordDriver
+  DEFAULT_SENDER_NAME = 'FBCフリマ'
+
   def call(params)
     client = Discordrb::Webhooks::Client.new(url: ENV['DISCORD_WEBHOOK_URL'])
 
@@ -8,7 +10,7 @@ class DiscordDriver
       embed_message = params[:embed_message]
 
       builder.content = params[:body]
-      builder.username = params[:sender_name] || 'FBCフリマ'
+      builder.username = params[:sender_name] || DEFAULT_SENDER_NAME
       add_embed(builder, embed_message) if embed_message.present?
     end
   end

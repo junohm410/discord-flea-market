@@ -6,15 +6,15 @@ class EmbedMessageFormatter
     @user = item.user
   end
 
-  def format_embed_message
+  def execute
     {
       title: @item.name,
       url: Rails.application.routes.url_helpers.item_url(@item),
       description: @item.description,
       timestamp: @item.created_at,
-      thumbnail: { url: @user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png' },
+      thumbnail: { url: @user.avatar_url },
       author: { name: @user.name,
-                icon_url: @user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png' },
+                icon_url: @user.avatar_url },
       item_field:
     }
   end
