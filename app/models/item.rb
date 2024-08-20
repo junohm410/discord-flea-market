@@ -20,7 +20,7 @@ class Item < ApplicationRecord
             limit: { max: 5, message: 'の枚数は5枚以下にしてください' },
             size: { less_than: 6.megabytes },
             processable_image: true
-  validate :deadline_later_than_today, unless: -> { validation_context == :select_buyer }
+  validate :deadline_later_than_today
   validate :price_cannot_be_changed_when_listed, on: :update
 
   scope :accessible_for, ->(user) { where(user:).or(not_unpublished) }
@@ -28,6 +28,15 @@ class Item < ApplicationRecord
   scope :closed_yesterday, -> { listed.where('deadline < ?', Time.zone.today) }
 
   paginates_per 10
+
+  def select_buyer!
+    if purchase_requests.exists?
+      assign_attributes(buyer: purchase_requests.sample.user, status: :buyer_selected)
+    else
+      self.status = :unpublished
+    end
+    save!(validate: false)
+  end
 
   def changed_to_listed_from_unpublished?
     saved_change_to_status == %w[unpublished listed]

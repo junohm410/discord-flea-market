@@ -97,6 +97,36 @@ RSpec.describe Item, type: :model do
     end
   end
 
+  describe '#select_buyer!' do
+    let(:item) { FactoryBot.create(:closed_yesterday_and_waiting_for_the_lottery_item, user: alice) }
+
+    context 'when item has purchase requests' do
+      before do
+        bob = FactoryBot.create(:user, name: 'bob')
+        carol = FactoryBot.create(:user, name: 'carol')
+        FactoryBot.create(:purchase_request, user: bob, item:)
+        FactoryBot.create(:purchase_request, user: carol, item:)
+      end
+
+      it 'selects a buyer and change the item status to buyer_selected' do
+        expect(item.listed?).to be true
+        expect(item.buyer).to be_nil
+        item.select_buyer!
+        expect(item.buyer_selected?).to be true
+        expect(item.buyer.name).to eq('bob').or eq('carol')
+      end
+    end
+
+    context 'when item has no purchase requests' do
+      it 'only changes the item status to unpublished' do
+        expect(item.listed?).to be true
+        expect(item.buyer).to be_nil
+        expect { item.select_buyer! }.not_to change(item, :buyer)
+        expect(item.unpublished?).to be true
+      end
+    end
+  end
+
   describe '#changed_to_listed_from_unpublished?' do
     context 'when an item status has changed from unpublished to listed' do
       it 'returns true' do
