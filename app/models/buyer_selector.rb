@@ -3,16 +3,20 @@
 class BuyerSelector
   def initialize(item)
     @item = item
-    @purchase_requests = @item.purchase_requests
   end
 
-  def select_buyer!
-    if @purchase_requests.exists?
-      buyer = @purchase_requests.sample.user
-      @item.assign_attributes(buyer:, status: :buyer_selected)
-    else
-      @item.status = :unpublished
+  def execute
+    @item.select_buyer!
+    notify_to_users
+  end
+
+  private
+
+  def notify_to_users
+    if @item.buyer_selected?
+      DiscordNotifier.with(item: @item).buyer_selected.notify_now
+    elsif @item.unpublished?
+      DiscordNotifier.with(item: @item).buyer_not_selected.notify_now
     end
-    @item.save!(context: :select_buyer)
   end
 end
