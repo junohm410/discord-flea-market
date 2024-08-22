@@ -6,7 +6,11 @@ class Item < ApplicationRecord
   has_many :purchase_requests, dependent: :destroy
   has_many :requesting_users, through: :purchase_requests, source: :user
   has_many :comments, dependent: :destroy
-  has_many_attached :images
+  has_many_attached :images do |attachable|
+    attachable.variant :small, resize_to_limit: [150, 100]
+    attachable.variant :medium, resize_to_limit: [200, 200]
+    attachable.variant :large, resize_to_limit: [600, 454]
+  end
 
   enum status: { listed: 0, unpublished: 1, buyer_selected: 2 }
 

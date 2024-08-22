@@ -39,7 +39,7 @@
       .flex.items-end.mt-2
         = form.collection_check_boxes :images, images, :signed_id, :signed_id, include_hidden: false do |b|
           .mr-2
-            = b.label { image_tag b.object.variant(resize_to_fit: [150, 100]) }
+            = b.label { image_tag b.object.variant(:small) }
             = b.check_box checked: true
   .my-5
     = form.label :images
