@@ -23,7 +23,7 @@
             = Item.human_attribute_name('status.buyer_selected')
         .my-5.w-1/6
           - if item.images.attached?
-            = image_tag item.images.includes(:blob).first.variant(resize_to_limit: [200, 200])
+            = image_tag item.images.includes(:blob).first.variant(:medium)
           - else
             = image_tag 'no_image.png'
         = render item

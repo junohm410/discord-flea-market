@@ -11,7 +11,7 @@
               ul.splide__list
                 - @item.images.includes(:blob).find_each do |image|
                   li class='splide__slide !flex !justify-center !items-center'
-                    = image_tag image.variant(resize_to_fit: [600, 454])
+                    = image_tag image.variant(:large)
       - else
         = image_tag 'no_image.png', class: 'w-1/2 mx-auto'
 
