@@ -9,7 +9,7 @@ class Item < ApplicationRecord
   has_many_attached :images do |attachable|
     attachable.variant :small, resize_to_limit: [150, 100]
     attachable.variant :medium, resize_to_limit: [200, 200]
-    attachable.variant :large, resize_to_limit: [600, 454], preprocessed: true
+    attachable.variant :large, resize_to_limit: [600, 454]
   end
 
   enum status: { listed: 0, unpublished: 1, buyer_selected: 2 }
