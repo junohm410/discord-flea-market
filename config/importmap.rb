@@ -8,3 +8,5 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "@stimulus-components/dropdown", to: "@stimulus-components--dropdown.js" # @3.0.0
 pin "stimulus-use" # @0.52.2
 pin "@splidejs/splide", to: "@splidejs--splide.js" # @4.1.4
+pin "@rails/activestorage", to: "activestorage.esm.js"
+pin_all_from "app/javascript/src", under: "src"
