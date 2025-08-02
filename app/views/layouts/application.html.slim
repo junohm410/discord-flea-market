@@ -2,7 +2,7 @@ doctype html
 html
   head
     title
-      | FjordFleaMarket
+      | DiscordFleaMarket
     meta[name='viewport' content='width=device-width,initial-scale=1']
     = csrf_meta_tags
     = csp_meta_tag
@@ -13,7 +13,7 @@ html
   body
     .flex.items-center.justify-between.px-5.py-3
       .text-3xl.font-bold.p-8
-        | Fjord Flea Market
+        | Discord Flea Market
       .flex.items-center
         - if user_signed_in?
           .relative data-controller="dropdown"
