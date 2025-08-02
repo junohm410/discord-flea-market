@@ -9,7 +9,8 @@
         - if @items.any?
           span.text-base.font-normal.text-gray-600.ml-2
             | (全#{@items.total_count}件)
-      = link_to '商品を出品する', new_item_path, class: 'btn-primary'
+      - if @items.any?
+        = link_to '商品を出品する', new_item_path, class: 'btn-primary'
 
   / 商品グリッドまたは空状態
   - if @items.any?

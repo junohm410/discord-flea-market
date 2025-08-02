@@ -16,24 +16,24 @@ RSpec.describe 'Users', type: :system do
     stub_request(:get, "#{Discordrb::API.api_base}/guilds/#{ENV['DISCORD_SERVER_ID']}/members/#{uid}")
 
     visit root_path
-    click_on 'Discordでログイン'
+    click_on 'Discordアカウントでログイン'
     expect(page).to have_content 'Discord アカウントによる認証に成功しました。'
-    expect(page).to have_content '現在出品されている商品一覧'
+    expect(page).to have_content '出品中の商品'
   end
 
   it 'can sign out' do
     sign_in user
     visit items_path
-    click_on 'Menu'
+    click_on 'メニュー'
     click_on 'ログアウト'
-    expect(page).to have_content 'Welcome'
-    expect(page).to have_content 'Discordでログイン'
+    expect(page).to have_content 'Discord Flea Market'
+    expect(page).to have_content 'Discordアカウントでログイン'
   end
 
   it 'can withdraw from this app' do
     sign_in user
     visit items_path
-    click_on 'Menu'
+    click_on 'メニュー'
     click_on '退会する'
     expect(page).to have_selector('h1', text: '退会')
     expect do
