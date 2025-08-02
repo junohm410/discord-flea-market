@@ -246,7 +246,7 @@ RSpec.describe 'Items', type: :system do
 
       sign_in alice
       visit items_path
-      expect(page).to have_content '現在出品されている商品一覧'
+      expect(page).to have_content '出品中の商品'
       expect(page).to have_content item.name
       expect(page).not_to have_content unpublished_item.name
       expect(page).not_to have_content buyer_selected_item.name
@@ -266,7 +266,8 @@ RSpec.describe 'Items', type: :system do
           expect(page).not_to have_selector("img[src$='books.png']")
         end
         within "#item_container_#{item_without_images.id}" do
-          expect(page).to have_selector("img[src*='no_image']")
+          expect(page).to have_content '🏷️'
+          expect(page).to have_content '画像なし'
         end
       end
     end

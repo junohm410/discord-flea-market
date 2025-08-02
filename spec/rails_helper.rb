@@ -70,6 +70,7 @@ RSpec.configure do |config|
   end
 
   config.include Devise::Test::IntegrationHelpers, type: :system
+  config.include FactoryBot::Syntax::Methods
 
   config.after(:suite) do
     Pathname(ActiveStorage::Blob.service.root).each_child do |path|

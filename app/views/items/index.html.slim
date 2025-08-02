@@ -1,20 +1,31 @@
 .w-full
   - content_for :title, '商品一覧'
-  .flex.justify-between.items-center
-    h1.font-bold.text-4xl
-      | 現在出品されている商品一覧
-    = link_to '商品を出品する', new_item_path, class: 'rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium'
-  #items.min-w-full
-    - @items.each do |item|
-      div id="item_container_#{item.id}"
-        .my-5.w-1/6
-          - if item.images.attached?
-            = image_tag item.images.includes(:blob).first.variant(:medium)
-          - else
-            = image_tag 'no_image.png'
-        = render item
-        p
-          = link_to '商品の詳細', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
 
-  .mt-5
-    = paginate @items
+  / ヘッダーツールバー
+  .mb-6
+    .flex.flex-wrap.items-center.justify-between.gap-4
+      h1.text-2xl.font-bold.text-gray-900
+        | 出品中の商品
+        - if @items.any?
+          span.text-base.font-normal.text-gray-600.ml-2
+            | (全#{@items.total_count}件)
+      - if @items.any?
+        = link_to '商品を出品する', new_item_path, class: 'btn-primary'
+
+  / 商品グリッドまたは空状態
+  - if @items.any?
+    .grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-3.gap-4.lg:gap-5
+      - @items.each do |item|
+        = render 'item_card', item:
+
+    / ページネーション
+    .mt-8.flex.justify-center
+      = paginate @items
+
+  - else
+    / 空状態
+    .flex.flex-col.items-center.justify-center.py-20
+      = render 'shared/icons/empty_box'
+      p.text-sm.text-gray-600.mb-6.mt-6
+        | 不要になったものを出品して、メンバーにシェアしてみませんか？
+      = link_to '商品を出品する', new_item_path, class: 'btn-primary'
