@@ -23,7 +23,7 @@
               | 落選
         .my-5.w-1/6
           - if item.images.attached?
-            = image_tag item.images.includes(:blob).first.variant(:medium)
+            = image_tag item.images.includes(:blob).first.variant(:optimized)
           - else
             = image_tag 'no_image.png'
         = render item
