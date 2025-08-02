@@ -1,28 +1,25 @@
 .w-full
-  - content_for :title, '商品の詳細'
-  h1.font-bold.text-4xl
-    | 商品の詳細
-  .mx-auto.flex.flex-wrap.justify-center.mt-5
-    .mx-auto
-      - if @item.images.attached?
-        div data-controller='item-carousel'
-          section.splide aria-label='商品画像一覧'
-            .splide__track
-              ul.splide__list
-                - @item.images.includes(:blob).find_each do |image|
-                  li class='splide__slide !flex !justify-center !items-center'
-                    = image_tag image.variant(:optimized)
-      - else
-        = image_tag 'no_image.png', class: 'w-1/2 mx-auto'
+  - content_for :title, @item.name
 
-    .mx-auto
-      = render @item
+  / メインコンテンツ - 2カラムレイアウト
+  .grid.grid-cols-1.lg:grid-cols-3.gap-6.lg:gap-8
 
-      - current_users_purchase_request = @item.purchase_requests.find_by(user_id: current_user.id) if @item.user != current_user
+    / 左カラム - 商品画像と詳細情報
+    .lg:col-span-2.space-y-6
+      / 商品画像セクション
+      .item-card
+        = render 'item_carousel', item: @item
 
-      = render('item_status_label', item: @item, current_users_purchase_request:)
-      = render('item_button', item: @item, current_users_purchase_request:)
+      / 商品詳細セクション
+      .item-card-padded
+        = render @item
 
-      = render 'comments/comments', item: @item
+      / コメントセクション
+      .item-card-padded
+        = render 'comments/comments', item: @item
 
-      = link_to '現在出品されている商品一覧に戻る', items_path, class: 'my-5 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+    = render 'item_sidebar', item: @item
+
+  / フッター
+  .mt-8.text-center
+    = link_to '← 商品一覧に戻る', items_path, class: 'btn-secondary inline-flex items-center gap-2'

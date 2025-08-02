@@ -1,29 +1,42 @@
 div id="#{dom_id item}"
-  h2.text-4xl.font-bold.text-gray-800
-    = item.name
-  .mt-3
-    .flex.items-center
-      p.text-4xl.font-medium.text-gray-800
-        = number_to_currency item.price
-      .flex.flex-col.ml-3
-        p.text-gray-600.text-sm
-          span = "#{Item.human_attribute_name(:shipping_cost_covered)}: "
-          = item.shipping_cost_covered ? '出品者' : '購入者'
-        p.text-gray-600.text-sm
-          span = "#{Item.human_attribute_name(:payment_method)}: "
+  / 商品名と説明
+  .space-y-6
+    h1.text-2xl.lg:text-3xl.font-bold.text-gray-900.leading-tight
+      = item.name
+
+    .text-gray-700.space-y-4
+      p.flex.items-start.gap-2
+        span.text-gray-500 aria-hidden="true" 📦
+        strong 商品の説明
+      .prose.prose-gray.max-w-none
+        = simple_format item_description_display(item), class: 'text-gray-700'
+
+    / 商品詳細情報グリッド
+    .grid.grid-cols-1.md:grid-cols-2.gap-4.pt-4.border-t.border-gray-200
+      div
+        p.item-label
+          span aria-hidden="true" 🚚
+          span 送料の負担
+        p.mt-1.item-value.font-medium
+          = shipping_cost_display(item)
+
+      div
+        p.item-label
+          span aria-hidden="true" 💳
+          span 希望する支払方法
+        p.mt-1.item-value.font-medium
           = item.payment_method
-  .mt-3
-    p.font-medium
-      = image_tag(item.user.avatar_url, class: 'inline-block mr-2 w-8 h-8 rounded-full')
-      | #{item.user.name} さんの出品
-  .mt-5
-    h3.text-lg.font-semibold.text-gray-800
-      = Item.human_attribute_name(:description)
-    = simple_format item.description, class: 'mt-2'
-  .mt-5
-    p.text-gray-600
-      span = '購入希望数: '
-      = item.purchase_requests.size
-    p.text-gray-600
-      span = "#{Item.human_attribute_name(:deadline)}: "
-      = l item.deadline
+
+      div
+        p.item-label
+          span aria-hidden="true" 📤
+          span 出品日
+        p.mt-1.item-value
+          = l item.created_at.to_date, format: :long
+
+      div
+        p.item-label
+          span aria-hidden="true" 🛠
+          span 最終更新
+        p.mt-1.item-value
+          = l item.updated_at.to_date, format: :long

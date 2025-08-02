@@ -1,0 +1,17 @@
+/ 締切情報（強調表示）
+.border.rounded-lg.p-4.mb-4 class=deadline_class(item)
+  .flex.items-center.gap-2.mb-2
+    span aria-hidden="true" ⏰
+    span.text-sm.font-medium.text-gray-700 締切
+
+  .flex.items-baseline.gap-2
+    .font-bold.text-lg
+      = formatted_deadline(item)
+    .text-sm
+      - message = deadline_message(item)
+      span.font-medium class=message[:class]
+        = message[:text]
+
+  .flex.justify-between.items-center.mt-3.pt-3.border-t
+    span.text-sm.text-gray-600 購入希望者
+    span.text-sm.font-bold = purchase_request_count_text(item)

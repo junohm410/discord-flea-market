@@ -1,0 +1,11 @@
+/ 価格表示
+.flex.justify-between.items-start.mb-4
+  div
+    .text-3xl.font-bold.leading-tight.text-primary-600
+      | ¥
+      = number_with_delimiter(item.price)
+    .mt-2.text-sm.text-gray-600.flex.flex-wrap.gap-2
+      span.inline-flex.items-center.gap-1.bg-gray-100.px-2.py-1.rounded.text-xs.font-medium
+        = shipping_cost_badge(item)
+      span.inline-flex.items-center.gap-1.bg-gray-100.px-2.py-1.rounded.text-xs.font-medium
+        = "支払い: #{item.payment_method}"

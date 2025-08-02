@@ -1,0 +1,15 @@
+- if item.images.attached?
+  .relative.overflow-hidden.rounded-xl
+    div data-controller='item-carousel'
+      section.splide aria-label='商品画像一覧'
+        .splide__track
+          ul.splide__list
+            - item.images.includes(:blob).find_each do |image|
+              li.splide__slide
+                = image_tag image.variant(:optimized),
+                  alt: "#{item.name}の商品画像",
+                  loading: 'lazy',
+                  style: 'width: 100%; height: 100%; object-fit: contain;'
+- else
+  div class="h-[300px] sm:h-[400px] lg:h-[500px] bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center rounded-xl"
+    = render 'shared/icons/image_placeholder'
