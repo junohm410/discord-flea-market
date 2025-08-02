@@ -3,7 +3,7 @@
 module ItemsHelper
   def item_image_url(item)
     if item.images.attached?
-      item.images.first.variant(:medium)
+      item.images.first.variant(:optimized)
     else
       'no_image.png'
     end
