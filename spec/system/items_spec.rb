@@ -330,7 +330,7 @@ RSpec.describe 'Items', type: :system do
         item = FactoryBot.create(:item, user: alice)
         sign_in alice
         visit item_path(item)
-        expect(page).to have_selector("img[src*='no_image']")
+        expect(page).to have_content '画像なし'
       end
     end
   end

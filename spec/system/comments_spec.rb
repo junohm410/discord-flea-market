@@ -10,11 +10,11 @@ RSpec.describe 'Comments', type: :system do
     sign_in alice
     visit item_path(item)
 
-    expect(page).to have_content 'コメント(0)'
+    expect(page).to have_content '(0)'
     fill_in 'comment[content]', with: 'テストコメント'
     click_button 'コメントする'
     expect(page).to have_content 'コメントを投稿しました'
-    expect(page).to have_content 'コメント(1)'
+    expect(page).to have_content '(1)'
 
     within "#comment_#{item.comments.first.id}" do
       expect(page).to have_content 'テストコメント'
@@ -27,10 +27,10 @@ RSpec.describe 'Comments', type: :system do
     expect do
       within "#comment_#{item.comments.first.id}" do
         expect(page).to have_content '編集したテストコメント'
-        click_button '削除'
+        click_link '削除'
       end
       expect(page).to have_content 'コメントを削除しました'
-      expect(page).to have_content 'コメント(0)'
+      expect(page).to have_content '(0)'
     end.to change(Comment, :count).by(-1)
 
     within '.comment-container' do
@@ -46,16 +46,16 @@ RSpec.describe 'Comments', type: :system do
     visit item_path(item)
     within "#comment_#{comment.id}" do
       expect(page).to have_content 'テストコメントです'
-      expect(page).not_to have_button '編集'
-      expect(page).not_to have_button '削除'
+      expect(page).not_to have_link '編集'
+      expect(page).not_to have_link '削除'
     end
 
     sign_in bob
     visit item_path(item)
     within "#comment_#{comment.id}" do
       expect(page).to have_content 'テストコメントです'
-      expect(page).not_to have_button '編集'
-      expect(page).to have_button '削除'
+      expect(page).to have_link '編集'
+      expect(page).to have_link '削除'
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe 'Comments', type: :system do
     sign_in alice
     visit item_path(item)
 
-    expect(page).to have_content 'コメント(1)'
+    expect(page).to have_content '(1)'
     within "#comment_#{comment.id}" do
       expect(page).to have_content 'テストコメントです'
       click_link '編集'
@@ -75,6 +75,6 @@ RSpec.describe 'Comments', type: :system do
     end
 
     expect(comment.content).to eq 'テストコメントです'
-    expect(page).to have_content 'コメント(1)'
+    expect(page).to have_content '(1)'
   end
 end

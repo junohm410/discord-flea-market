@@ -1,13 +1,25 @@
 - if item.user == current_user
-  - if (item.listed? && item.deadline >= Time.zone.today) || item.unpublished?
-    = link_to '商品を編集する', edit_item_path(item), class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
-    .inline-block.ml-2
-      = button_to '商品を削除する', item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
-  - elsif item.buyer_selected?
-    .inline-block.ml-2
-      = button_to '商品を削除する', item, method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
+  - if can_edit_item?(item)
+    .flex.flex-col.gap-2
+      = link_to '商品を編集する', edit_item_path(item),
+        class: 'btn-secondary w-full text-center'
+      = button_to '商品を削除する', item,
+        method: :delete,
+        data: { confirm: '本当に削除しますか？' },
+        class: 'w-full border border-red-300 text-red-700 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors duration-150'
+  - elsif can_delete_item_as_owner?(item)
+    = button_to '商品を削除する', item,
+      method: :delete,
+      data: { confirm: '本当に削除しますか？' },
+      class: 'w-full border border-red-300 text-red-700 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors duration-150'
 - elsif item.listed?
-  - if current_users_purchase_request.present? && item.deadline >= Time.zone.today
-    = button_to '購入希望を取り消す', item_purchase_request_path(item, current_users_purchase_request), method: :delete, class: 'mt-3 rounded-lg py-3 px-5 bg-red-600 text-white font-medium'
-  - elsif item.deadline >= Time.zone.today
-    = button_to '購入希望を出す', item_purchase_requests_path(item), class: 'mt-3 rounded-lg py-3 px-5 bg-blue-600 text-white font-medium'
+  - if can_cancel_purchase_request?(item, current_users_purchase_request)
+    = button_to item_purchase_request_path(item, current_users_purchase_request), method: :delete, class: 'w-full' do
+      .bg-red-600.hover:bg-red-700.text-white.font-medium.py-3.px-4.rounded-md.transition-colors.flex.items-center.justify-center.gap-2
+        span.mr-1 ❌
+        | 購入希望を取り消す
+  - elsif can_make_purchase_request?(item)
+    = button_to item_purchase_requests_path(item), class: 'w-full' do
+      .btn-primary.w-full.text-center.py-3.flex.items-center.justify-center.gap-2
+        span.mr-1 🛒
+        | 購入希望を出す
