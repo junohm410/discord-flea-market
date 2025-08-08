@@ -4,12 +4,30 @@ article.group.bg-white.rounded-xl.shadow-md.hover:shadow-lg.transition-all.durat
   aria-labelledby="item_title_#{item.id}"]
   / 画像エリア（16:9アスペクト比）
   .relative.w-full style="padding-top: 56.25%;"
+    - if local_assigns[:show_status_badge]
+      .absolute.top-2.left-2.z-10
+        - case item.status
+        - when 'listed'
+          span.inline-flex.items-center.px-3.py-1.rounded-full.text-sm.font-semibold.bg-blue-600.text-white.shadow
+            = Item.human_attribute_name('status.listed')
+        - when 'unpublished'
+          span.inline-flex.items-center.px-3.py-1.rounded-full.text-sm.font-semibold.bg-gray-700.text-white.shadow
+            = Item.human_attribute_name('status.unpublished')
+        - when 'buyer_selected'
+          span.inline-flex.items-center.px-3.py-1.rounded-full.text-sm.font-semibold.bg-yellow-500.text-white.shadow
+            = Item.human_attribute_name('status.buyer_selected')
     - if item.images.attached?
       = link_to item, class: 'absolute inset-0' do
         = image_tag item_image_url(item),
           class: 'absolute inset-0 w-full h-full object-cover',
           loading: 'lazy',
           alt: "#{item.name}の商品画像"
+    - elsif local_assigns[:use_default_image_for_no_image]
+      = link_to item, class: 'absolute inset-0' do
+        = image_tag 'no_image.png',
+          class: 'absolute inset-0 w-full h-full object-cover',
+          loading: 'lazy',
+          alt: "#{item.name}のデフォルト画像"
     - else
       = link_to item, class: 'absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center' do
         = render 'shared/icons/image_placeholder'
