@@ -6,13 +6,13 @@ class ListedItemsController < ApplicationController
     @items =
       case params[:status]
       when 'listed'
-        items.listed.includes(:images_attachments)
+        items.listed.includes(:user, :images_attachments)
       when 'unpublished'
-        items.unpublished.includes(:images_attachments)
+        items.unpublished.includes(:user, :images_attachments)
       when 'buyer_selected'
-        items.buyer_selected.includes(:images_attachments)
+        items.buyer_selected.includes(:user, :images_attachments)
       else
-        items.includes(:images_attachments)
+        items.includes(:user, :images_attachments)
       end.order(id: :desc).page(params[:page])
   end
 end
