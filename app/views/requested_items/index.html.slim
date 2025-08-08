@@ -1,35 +1,37 @@
 .w-full
   - content_for :title, '自分が購入希望を出した商品一覧'
-  .flex.justify-between.items-center
-    h1.font-bold.text-4xl
-      | 自分が購入希望を出した商品一覧
-  .flex.items-center.mt-3
-    = link_to 'すべて', requested_items_path, class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
-    = link_to '購入希望中', requested_items_path(status: 'requested'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
-    = link_to '購入確定', requested_items_path(status: 'selected_as_buyer'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
-    = link_to '落選', requested_items_path(status: 'not_selected'), class: 'ml-2 rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
-  #items.min-w-full
-    - @items.each do |item|
-      div id="requested_item_container_#{item.id}"
-        - if item.listed?
-          p.mt-3.bg-blue-600.text-white.py-1.px-2.rounded-lg.inline-block
-            | 購入希望中
-        - if item.buyer_selected?
-          - if item.buyer == current_user
-            p.mt-3.bg-yellow-300.text-yellow-800.py-1.px-2.rounded-lg.inline-block
-              | 購入確定
-          - else
-            p.mt-3.bg-gray-300.text-gray-800.py-1.px-2.rounded-lg.inline-block
-              | 落選
-        .my-5.w-1/6
-          - if item.images.attached?
-            = image_tag item.images.includes(:blob).first.variant(:optimized)
-          - else
-            = image_tag 'no_image.png'
-        = render item
-        p
-          = link_to '商品の詳細', item, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
-  = link_to '現在出品されている商品一覧に戻る', items_path, class: 'mt-5 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
 
-  .mt-5
-    = paginate @items
+  / ヘッダーツールバー
+  .mb-6
+    .flex.flex-wrap.items-center.justify-between.gap-4
+      h1.text-2xl.font-bold.text-gray-900
+        | 自分が購入希望を出した商品
+        - if @items.any?
+          span.text-base.font-normal.text-gray-600.ml-2
+            | (全#{@items.total_count}件)
+
+    / ステータスフィルタ
+    .flex.flex-wrap.items-center.gap-2.mt-2
+      = link_to 'すべて', requested_items_path, class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+      = link_to '購入希望中', requested_items_path(status: 'requested'), class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+      = link_to '購入確定', requested_items_path(status: 'selected_as_buyer'), class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+      = link_to '落選', requested_items_path(status: 'not_selected'), class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+
+  / 商品グリッドまたは空状態
+  - if @items.any?
+    .grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-3.gap-4.lg:gap-5
+      - @items.each do |item|
+        div id="requested_item_container_#{item.id}"
+          = render 'items/item_card', item:, use_default_image_for_no_image: true, show_status_badge: true
+
+    / ページネーション
+    .mt-8.flex.justify-center
+      = paginate @items
+
+  - else
+    / 空状態
+    .flex.flex-col.items-center.justify-center.py-20
+      = render 'shared/icons/empty_box'
+      p.text-sm.text-gray-600.mb-6.mt-6
+        | 購入希望を出してみましょう。
+      = link_to '商品一覧を見る', items_path, class: 'btn-primary'

@@ -22,16 +22,15 @@ article.group.bg-white.rounded-xl.shadow-md.hover:shadow-lg.transition-all.durat
           class: 'absolute inset-0 w-full h-full object-cover',
           loading: 'lazy',
           alt: "#{item.name}の商品画像"
+    - elsif local_assigns[:use_default_image_for_no_image]
+      = link_to item, class: 'absolute inset-0' do
+        = image_tag 'no_image.png',
+          class: 'absolute inset-0 w-full h-full object-cover',
+          loading: 'lazy',
+          alt: "#{item.name}のデフォルト画像"
     - else
-      - if local_assigns[:use_default_image_for_no_image]
-        = link_to item, class: 'absolute inset-0' do
-          = image_tag 'no_image.png',
-            class: 'absolute inset-0 w-full h-full object-cover',
-            loading: 'lazy',
-            alt: "#{item.name}のデフォルト画像"
-      - else
-        = link_to item, class: 'absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center' do
-          = render 'shared/icons/image_placeholder'
+      = link_to item, class: 'absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center' do
+        = render 'shared/icons/image_placeholder'
 
   / コンテンツエリア
   .flex-1.flex.flex-col.p-4
