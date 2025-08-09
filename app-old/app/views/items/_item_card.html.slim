@@ -1,0 +1,83 @@
+article.group.bg-white.rounded-xl.shadow-md.hover:shadow-lg.transition-all.duration-200.overflow-hidden.flex.flex-col.h-full.border.border-gray-100[
+  id="item_container_#{item.id}"
+  role="group"
+  aria-labelledby="item_title_#{item.id}"]
+  / 画像エリア（16:9アスペクト比）
+  .relative.w-full style="padding-top: 56.25%;"
+    - if local_assigns[:show_status_badge]
+      .absolute.top-2.left-2.z-10
+        - case item.status
+        - when 'listed'
+          span.inline-flex.items-center.px-3.py-1.rounded-full.text-sm.font-semibold.bg-blue-600.text-white.shadow
+            = Item.human_attribute_name('status.listed')
+        - when 'unpublished'
+          span.inline-flex.items-center.px-3.py-1.rounded-full.text-sm.font-semibold.bg-gray-700.text-white.shadow
+            = Item.human_attribute_name('status.unpublished')
+        - when 'buyer_selected'
+          span.inline-flex.items-center.px-3.py-1.rounded-full.text-sm.font-semibold.bg-yellow-500.text-white.shadow
+            = Item.human_attribute_name('status.buyer_selected')
+    - if item.images.attached?
+      = link_to item, class: 'absolute inset-0' do
+        = image_tag item_image_url(item),
+          class: 'absolute inset-0 w-full h-full object-cover',
+          loading: 'lazy',
+          alt: "#{item.name}の商品画像"
+    - elsif local_assigns[:use_default_image_for_no_image]
+      = link_to item, class: 'absolute inset-0' do
+        = image_tag 'no_image.png',
+          class: 'absolute inset-0 w-full h-full object-cover',
+          loading: 'lazy',
+          alt: "#{item.name}のデフォルト画像"
+    - else
+      = link_to item, class: 'absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center' do
+        = render 'shared/icons/image_placeholder'
+
+  / コンテンツエリア
+  .flex-1.flex.flex-col.p-4
+    / タイトルと価格
+    h2.text-base.lg:text-lg.font-semibold.text-gray-900.mb-2.line-clamp-2 id="item_title_#{item.id}"
+      = item.name
+
+    .flex.items-baseline.justify-between.mb-3
+      p.text-xl.lg:text-2xl.font-bold.text-primary-600 aria-label="価格 #{number_to_currency item.price}"
+        = number_to_currency item.price
+      span.inline-flex.items-center.px-2.py-0.5.rounded-full.text-xs.font-medium.bg-gray-100.text-gray-700
+        = shipping_badge_text(item)
+
+    / メタ情報
+    .space-y-2.text-sm.flex-1
+      / 出品者情報
+      .flex.items-center.gap-2
+        = image_tag item.user.avatar_url,
+          class: 'w-5 h-5 rounded-full ring-1 ring-gray-200',
+          alt: "#{item.user.name}のアバター"
+        span.text-gray-600
+          | 出品者:
+          span.font-medium = item.user.name
+
+      / 締切と希望者数
+      - deadline = deadline_status(item)
+      - requests = purchase_requests_info(item)
+      .flex.items-center.justify-between.text-gray-500
+        .flex.items-center.gap-1
+          span ⏰
+          - case deadline[:status]
+          - when 'expired'
+            span.text-red-600.font-medium = deadline[:text]
+          - when 'today'
+            span.text-orange-600.font-medium = deadline[:text]
+          - when 'soon'
+            span.font-medium
+              = deadline[:text]
+              span.text-orange-600.ml-1 = deadline[:suffix]
+          - else
+            span = deadline[:text]
+
+        span.font-medium class=(requests[:has_requests] ? 'text-primary-600' : '')
+          = requests[:text]
+
+    / アクション
+    .mt-4
+      = link_to '詳細を見る', item, class: 'block w-full text-center py-2 px-4 border border-gray-300 rounded-md ' \
+        'text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 ' \
+        'focus:ring-offset-2 focus:ring-primary-500 transition-colors'

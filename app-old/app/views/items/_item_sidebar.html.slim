@@ -1,0 +1,19 @@
+/ 右カラム - 購入アクションと出品者情報
+.space-y-6
+  / 価格とアクション
+  .item-card-padded.sticky.top-6
+    - current_users_purchase_request = current_users_purchase_request(item, current_user)
+
+    = render('item_price', item:)
+
+    = render('item_deadline', item:)
+    / ステータスラベル
+    .mb-4
+      = render('item_status_label', item:, current_users_purchase_request:)
+
+    / アクションボタン
+    = render('item_button', item:, current_users_purchase_request:)
+
+  / 出品者情報
+  .item-card.p-4
+    = render('item_seller', item:)

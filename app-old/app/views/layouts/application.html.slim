@@ -1,0 +1,44 @@
+doctype html
+html
+  head
+    title
+      | DiscordFleaMarket
+    meta[name='viewport' content='width=device-width,initial-scale=1']
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'tailwind', 'inter-font', 'data-turbo-track': 'reload'
+    = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
+    = stylesheet_link_tag 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css'
+    = javascript_importmap_tags
+  body.bg-gray-50
+    header.bg-white.shadow-sm.border-b.border-gray-200
+      .container.mx-auto.px-6
+        .flex.items-center.justify-between.h-16
+          = link_to root_path, class: 'text-2xl font-bold text-primary-700 hover:text-primary-800 transition-colors'
+            | Discord Flea Market
+          - if user_signed_in?
+            .flex.items-center.gap-4
+              .flex.items-center.gap-2
+                = image_tag(current_user.avatar_url, class: 'w-8 h-8 rounded-full')
+                span.text-sm.font-medium.text-gray-700
+                  = current_user.name
+              .relative data-controller="dropdown"
+                button.btn-secondary type="button" data-action="dropdown#toggle click@window->dropdown#hide"
+                  | メニュー
+                div[data-dropdown-target="menu"
+                  data-transition-enter-from="opacity-0 scale-95"
+                  data-transition-enter-to="opacity-100 scale-100"
+                  data-transition-leave-from="opacity-100 scale-100"
+                  data-transition-leave-to="opacity-0 scale-95"
+                  class='hidden transition transform origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-gray-200 z-50']
+                    .py-1
+                      = link_to '自分の商品一覧', listed_items_path, class: 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                      = link_to '購入希望一覧', requested_items_path, class: 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                    .border-t.border-gray-200.py-1
+                      = link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                      = link_to '退会する', withdraw_path, class: 'block px-4 py-2 text-sm text-red-600 hover:bg-red-50'
+    main.container.mx-auto.px-6.py-8
+      #flash
+        = render 'layouts/flash'
+      = yield
+    = any_login_here if defined?(AnyLogin)

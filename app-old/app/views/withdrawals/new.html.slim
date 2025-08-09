@@ -1,0 +1,15 @@
+.w-full
+  - content_for :title, '退会'
+
+  / ヘッダーツールバー（他ページと同じ見出しスタイル）
+  .mb-6
+    .flex.flex-wrap.items-center.justify-between.gap-4
+      h1.text-2xl.font-bold.text-gray-900
+        | 退会
+
+  / 内容
+  .space-y-4
+    p.text-gray-700.leading-relaxed
+      | 退会すると、過去のものを含む自分の出品・購入希望のデータが削除されます。本当に退会しますか？
+
+    = button_to '退会する', current_user, method: :delete, data: { turbo_confirm: '過去のものを含む自分の出品・購入希望のデータが削除されます。本当に退会しますか？' }, class: 'rounded-lg py-3 px-5 bg-red-600 text-white inline-block font-medium'

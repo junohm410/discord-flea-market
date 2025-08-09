@@ -1,0 +1,39 @@
+.w-full
+  - content_for :title, '自分の商品一覧'
+
+  / ヘッダーツールバー
+  .mb-6
+    .flex.flex-wrap.items-center.justify-between.gap-4
+      h1.text-2xl.font-bold.text-gray-900
+        | 自分の商品
+        - if @items.any?
+          span.text-base.font-normal.text-gray-600.ml-2
+            | (全#{@items.total_count}件)
+      - if @items.any?
+        = link_to '商品を出品する', new_item_path, class: 'btn-primary'
+
+    / ステータスフィルタ
+    .flex.flex-wrap.items-center.gap-2.mt-2
+      = link_to 'すべて', listed_items_path, class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+      = link_to Item.human_attribute_name('status.listed'), listed_items_path(status: 'listed'), class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+      = link_to Item.human_attribute_name('status.buyer_selected'), listed_items_path(status: 'buyer_selected'), class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+      = link_to Item.human_attribute_name('status.unpublished'), listed_items_path(status: 'unpublished'), class: 'rounded-lg py-1 px-2 bg-gray-100 inline-block font-medium'
+
+  / 商品グリッドまたは空状態
+  - if @items.any?
+    .grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-3.gap-4.lg:gap-5
+      - @items.each do |item|
+        div id="listed_item_container_#{item.id}"
+          = render 'items/item_card', item:, use_default_image_for_no_image: true, show_status_badge: true
+
+    / ページネーション
+    .mt-8.flex.justify-center
+      = paginate @items
+
+  - else
+    / 空状態
+    .flex.flex-col.items-center.justify-center.py-20
+      = render 'shared/icons/empty_box'
+      p.text-sm.text-gray-600.mb-6.mt-6
+        | まずは商品を出品してみましょう。
+      = link_to '商品を出品する', new_item_path, class: 'btn-primary'

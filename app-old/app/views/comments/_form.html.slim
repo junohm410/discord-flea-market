@@ -1,0 +1,26 @@
+= turbo_frame_tag comment
+  - if comment.errors.any?
+    .bg-red-50.border.border-red-300.text-red-800.px-4.py-3.rounded-lg.mb-4 role="alert"
+      h2.text-sm.font-medium = t('errors.template.header', model: comment.model_name.human, count: comment.errors.count)
+      ul.mt-2.list-disc.list-inside.text-sm
+        - comment.errors.each do |error|
+          li = error.full_message
+
+  = form_with(model: [comment.item, comment]) do |form|
+    .space-y-3
+      div
+        = form.label :content, 'コメントを追加', class: 'block text-sm font-medium text-gray-700 mb-1'
+        = form.text_area :content,
+          rows: 3,
+          required: true,
+          placeholder: '質問や感想などお気軽にどうぞ',
+          class: 'block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm resize-none transition-colors',
+          aria: { describedby: 'comment-help' }
+        p.mt-1.text-xs.text-gray-500 id="comment-help"
+          | 商品についての質問や感想を投稿できます
+
+      .flex.justify-end.gap-2
+        - if comment.persisted?
+          = link_to 'キャンセル', comment.item, class: 'btn-secondary text-sm'
+        - submit_label = comment.new_record? ? 'コメントする' : '更新する'
+        = form.submit submit_label, class: 'btn-primary text-sm cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500'

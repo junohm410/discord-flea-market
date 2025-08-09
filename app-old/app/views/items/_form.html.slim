@@ -1,0 +1,51 @@
+= form_with(model: item, class: 'contents') do |form|
+  - if item.errors.any?
+    #error_explanation.bg-red-50.text-red-500.px-3.py-2.font-medium.rounded-lg.mt-3
+      h2 = t('errors.template.header', model: item.model_name.human, count: item.errors.count)
+      ul
+        - item.errors.each do |error|
+          li
+            = error.full_message
+  .my-5
+    = form.label :name
+    = form.text_field :name, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :price
+    - if item.new_record? || item.unpublished?
+      = form.number_field :price, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+    - else
+      = form.number_field :price, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full', readonly: true
+      p.text-gray-400.font-medium.mt-2.text-sm
+        | ※この商品は出品中です。一度出品した商品の価格は、出品中は変更できません。<br>
+        | 価格を変更したい場合は、商品を非公開にした後に価格を変更し、再度出品してください。<br>
+        | 商品を非公開にすると、出品が取り消された扱いとなり、既存の購入希望は全て取り消され、購入希望者にその旨の通知が送られます。
+  .my-5
+    = form.label :description
+    = form.text_area :description, rows: 4, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :shipping_cost_covered
+    = form.check_box :shipping_cost_covered, class: 'block mt-2 h-5 w-5'
+  .my-5
+    = form.label :payment_method
+    = form.text_field :payment_method, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .my-5
+    = form.label :deadline
+    = form.date_field :deadline, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  - if (images = item.images_attachments.includes(:blob).presence)
+    .my-5
+      label 現在添付されている商品画像
+      p.text-gray-400.font-medium.mt-2.text-sm
+        | 画像を削除したい場合はチェックボックスを外してください。
+      .flex.items-end.mt-2
+        = form.collection_check_boxes :images, images, :signed_id, :signed_id, include_hidden: false do |b|
+          .mr-2
+            = b.label { image_tag b.object.variant(:optimized), class: 'w-32 h-24 object-cover' }
+            = b.check_box checked: true
+  .my-5
+    = form.label :images
+    = form.file_field :images, multiple: true, class: 'block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full'
+  .inline
+    = form.submit '非公開として保存', class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium cursor-pointer'
+  .inline
+    - list_buttons_label = item.persisted? && item.listed? ? '変更する' : '出品する'
+    = form.submit list_buttons_label, class: 'ml-2 rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer'

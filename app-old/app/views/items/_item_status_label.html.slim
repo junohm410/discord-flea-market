@@ -1,0 +1,31 @@
+- if item.listed? && item.deadline < Time.zone.today
+  .inline-flex.items-center.px-3.py-1.5.rounded-full.text-sm.font-medium.bg-red-50.text-red-700.border.border-red-200
+    span.mr-1 ⏰
+    | 購入者の抽選待ちです
+
+- if item.user == current_user
+  - if item.buyer_selected?
+    .inline-flex.items-center.px-3.py-1.5.rounded-full.text-sm.font-medium.bg-yellow-50.text-yellow-800.border.border-yellow-200
+      span.mr-1 ✅
+      | 購入者が確定しました
+  - if item.unpublished?
+    .inline-flex.items-center.px-3.py-1.5.rounded-full.text-sm.font-medium.bg-gray-100.text-gray-700.border.border-gray-200
+      span.mr-1 🚫
+      | この商品は非公開です
+- elsif item.buyer == current_user
+  .inline-flex.items-center.px-3.py-1.5.rounded-full.text-sm.font-medium.bg-green-50.text-green-800.border.border-green-200
+    span.mr-1 🎆
+    | あなたが購入者となりました
+- elsif current_users_purchase_request.present?
+  - if item.listed?
+    .inline-flex.items-center.px-3.py-1.5.rounded-full.text-sm.font-medium.bg-primary-100.text-primary-800.border.border-primary-200
+      span.mr-1 ✔️
+      | 購入希望を出しています
+  - elsif item.buyer_selected?
+    .inline-flex.items-center.px-3.py-1.5.rounded-full.text-sm.font-medium.bg-gray-100.text-gray-700.border.border-gray-200
+      span.mr-1 ❌
+      | 落選しました
+- elsif item.buyer_selected?
+  .inline-flex.items-center.px-3.py-1.5.rounded-full.text-sm.font-medium.bg-red-50.text-red-700.border.border-red-200
+    span.mr-1 🔴
+    | 終了しました
