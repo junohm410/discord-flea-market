@@ -3,7 +3,7 @@
 module Api
   module V1
     class ItemsController < Api::BaseController
-      before_action :authenticate_user!, only: %i[create update destroy]
+      before_action :authenticate_user!
       before_action :set_owned_item, only: %i[update destroy]
 
       def index

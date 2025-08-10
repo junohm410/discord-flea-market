@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Items のAPI', type: :request do
   let(:user) { create(:user) }
 
+  before { sign_in user }
+
   describe 'GET /api/v1/items（一覧）' do
     before do
       create_list(:item, 15, status: :listed, user: create(:user))
@@ -47,8 +49,6 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
   end
 
   describe 'POST /api/v1/items（作成）' do
-    before { sign_in user }
-
     let(:valid_params) do
       {
         item: {
@@ -72,8 +72,6 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
   end
 
   describe 'PATCH /api/v1/items/:id（更新）' do
-    before { sign_in user }
-
     it '所有者なら更新できる' do
       item = create(:item, user:, status: :listed)
       patch "/api/v1/items/#{item.id}", params: { item: { description: '更新後' } }
@@ -91,8 +89,6 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
   end
 
   describe 'DELETE /api/v1/items/:id（削除）' do
-    before { sign_in user }
-
     it '所有者なら削除でき、204で返る' do
       item = create(:item, user:, status: :listed)
       delete "/api/v1/items/#{item.id}"
