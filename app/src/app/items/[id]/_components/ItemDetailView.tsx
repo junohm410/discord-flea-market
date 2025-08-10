@@ -6,6 +6,9 @@ import styled from "styled-components";
 import ItemPrice from "@/components/items/ItemPrice";
 import ItemStatusLabel from "@/components/items/ItemStatusLabel";
 import ItemComments from "./ItemComments";
+import { requestedItemIds } from "@/mock/requests";
+import ItemRequestToggle from "./ItemRequestToggle";
+import ItemDeleteButton from "./ItemDeleteButton";
 
 type Item = {
   id: number;
@@ -42,7 +45,13 @@ const ItemDetailView = ({ item }: { item: Item }) => {
           {/* TODO: 認可チェック：出品者本人のみ編集可能。非本人はこのボタンを表示しない or 無効化する */}
           <Actions>
             <EditLink href={`/items/${item.id}/edit`}>編集する</EditLink>
+            {/* TODO: 出品者本人のみ表示 */}
+            <ItemDeleteButton itemId={item.id} />
           </Actions>
+          <ItemRequestToggle
+            itemId={item.id}
+            initialRequested={requestedItemIds.includes(item.id)}
+          />
         </InfoSection>
         <ItemComments itemId={item.id} />
       </Grid>
