@@ -5,6 +5,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import ItemPrice from "@/components/items/ItemPrice";
 import ItemStatusLabel from "@/components/items/ItemStatusLabel";
+import ItemComments from "./ItemComments";
 
 type Item = {
   id: number;
@@ -43,6 +44,7 @@ const ItemDetailView = ({ item }: { item: Item }) => {
             <EditLink href={`/items/${item.id}/edit`}>編集する</EditLink>
           </Actions>
         </InfoSection>
+        <ItemComments itemId={item.id} />
       </Grid>
     </Main>
   );
