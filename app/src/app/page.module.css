@@ -16,6 +16,10 @@
   font-family: var(--font-geist-sans);
 }
 
+/*
+  ダークモード（将来再有効化用）
+  有効化したい場合は、このコメントを外してください。
+
 @media (prefers-color-scheme: dark) {
   .page {
     --gray-rgb: 255, 255, 255;
@@ -26,6 +30,7 @@
     --button-secondary-hover: #1a1a1a;
   }
 }
+*/
 
 .main {
   display: flex;
@@ -67,10 +72,7 @@
   height: 48px;
   padding: 0 20px;
   border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -160,8 +162,13 @@ a.secondary {
   }
 }
 
+/*
+  ダークモード（ロゴ反転の再有効化用）
+  有効化したい場合は、このコメントを外してください。
+
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();
   }
 }
+*/
