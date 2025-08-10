@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  namespace :api do
+    get :health, to: 'health#index'
+    namespace :v1 do
+      # 後続でコントローラを実装
+    end
+  end
+
   resources :items do
     resources :purchase_requests, only: [:create, :destroy]
     resources :comments, only: [:new, :create, :edit, :update, :destroy]
