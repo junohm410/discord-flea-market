@@ -3,6 +3,10 @@ Rails.application.routes.draw do
     get :health, to: 'health#index'
     namespace :v1 do
       resources :items, only: [:index, :show, :create, :update, :destroy]
+      namespace :me do
+        resources :listed_items, only: [:index]
+        resources :requested_items, only: [:index]
+      end
     end
   end
 

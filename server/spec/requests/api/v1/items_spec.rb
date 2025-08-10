@@ -37,12 +37,12 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
 
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
-      expect(json['data']).to include('id', 'title', 'description', 'price', 'status', 'deadline', 'seller', 'imageUrls')
-      expect(json['data']['id']).to eq item.id
-      expect(json['data']['title']).to eq item.name
-      expect(json['data']['seller']).to include('name' => user.name, 'avatarUrl' => user.avatar_url)
-      expect(json['data']['imageUrls']).to be_an(Array)
-      expect(json['data']['imageUrls'].first).to include('/rails/active_storage')
+      expect(json).to include('id', 'title', 'description', 'price', 'status', 'deadline', 'seller', 'imageUrls')
+      expect(json['id']).to eq item.id
+      expect(json['title']).to eq item.name
+      expect(json['seller']).to include('name' => user.name, 'avatarUrl' => user.avatar_url)
+      expect(json['imageUrls']).to be_an(Array)
+      expect(json['imageUrls'].first).to include('/rails/active_storage')
     end
   end
 
@@ -67,7 +67,7 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
       post '/api/v1/items', params: valid_params
       expect(response).to have_http_status(:created)
       json = JSON.parse(response.body)
-      expect(json['data']['title']).to eq '新規アイテム'
+      expect(json['title']).to eq '新規アイテム'
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
       patch "/api/v1/items/#{item.id}", params: { item: { description: '更新後' } }
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
-      expect(json['data']['description']).to eq '更新後'
+      expect(json['description']).to eq '更新後'
     end
 
     it '他人のアイテムは更新できない（404）' do
