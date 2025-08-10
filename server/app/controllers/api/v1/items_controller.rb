@@ -24,14 +24,13 @@ module Api
 
       def show
         item = Item.listed.find(params[:id])
-        data_json = ItemResource.new(item).serialize
-        render body: { data: JSON.parse(data_json) }.to_json, content_type: 'application/json'
+        render body: ItemResource.new(item).serialize, content_type: 'application/json'
       end
 
       def create
         item = current_user.items.new(item_params)
         if item.save
-          render body: { data: JSON.parse(ItemResource.new(item).serialize) }.to_json,
+          render body: ItemResource.new(item).serialize,
                  content_type: 'application/json', status: :created
         else
           render json: { error: { code: 'unprocessable_entity', message: 'Validation failed', details: item.errors.full_messages } },
@@ -41,7 +40,7 @@ module Api
 
       def update
         if @item.update(item_params)
-          render body: { data: JSON.parse(ItemResource.new(@item).serialize) }.to_json, content_type: 'application/json'
+          render body: ItemResource.new(@item).serialize, content_type: 'application/json'
         else
           render json: { error: { code: 'unprocessable_entity', message: 'Validation failed', details: @item.errors.full_messages } },
                  status: :unprocessable_entity

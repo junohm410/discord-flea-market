@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   namespace :api do
     get :health, to: 'health#index'
     namespace :v1 do
-      resources :items, only: [:index, :show, :create, :update, :destroy]
+      resources :items, only: [:index, :show, :create, :update, :destroy] do
+        resources :comments, only: [:index, :create, :update, :destroy]
+      end
       namespace :me do
         resources :listed_items, only: [:index]
         resources :requested_items, only: [:index]
