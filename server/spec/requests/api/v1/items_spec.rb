@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Items のAPI', type: :request do
+  let(:user) { create(:user) }
+
   describe 'GET /api/v1/items（一覧）' do
     before do
       create_list(:item, 15, status: :listed, user: create(:user))
@@ -41,6 +43,61 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
       expect(json['data']['seller']).to include('name' => user.name, 'avatarUrl' => user.avatar_url)
       expect(json['data']['imageUrls']).to be_an(Array)
       expect(json['data']['imageUrls'].first).to include('/rails/active_storage')
+    end
+  end
+
+  describe 'POST /api/v1/items（作成）' do
+    before { sign_in user }
+
+    let(:valid_params) do
+      {
+        item: {
+          name: '新規アイテム',
+          description: '説明',
+          price: 1200,
+          shipping_cost_covered: true,
+          payment_method: 'PayPay',
+          deadline: Time.zone.tomorrow,
+          status: 'listed'
+        }
+      }
+    end
+
+    it '認証済みなら作成でき、201で返る' do
+      post '/api/v1/items', params: valid_params
+      expect(response).to have_http_status(:created)
+      json = JSON.parse(response.body)
+      expect(json['data']['title']).to eq '新規アイテム'
+    end
+  end
+
+  describe 'PATCH /api/v1/items/:id（更新）' do
+    before { sign_in user }
+
+    it '所有者なら更新できる' do
+      item = create(:item, user:, status: :listed)
+      patch "/api/v1/items/#{item.id}", params: { item: { description: '更新後' } }
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json['data']['description']).to eq '更新後'
+    end
+
+    it '他人のアイテムは更新できない（404）' do
+      other = create(:user)
+      item = create(:item, user: other, status: :listed)
+      patch "/api/v1/items/#{item.id}", params: { item: { description: 'NG' } }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe 'DELETE /api/v1/items/:id（削除）' do
+    before { sign_in user }
+
+    it '所有者なら削除でき、204で返る' do
+      item = create(:item, user:, status: :listed)
+      delete "/api/v1/items/#{item.id}"
+      expect(response).to have_http_status(:no_content)
+      expect(Item.where(id: item.id)).to be_empty
     end
   end
 end
