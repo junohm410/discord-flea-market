@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :items, only: [:index, :show, :create, :update, :destroy] do
         resources :comments, only: [:index, :create, :update, :destroy]
+        resources :purchase_requests, only: [:create, :destroy]
       end
       namespace :me do
         resources :listed_items, only: [:index]
