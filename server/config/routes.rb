@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   namespace :api do
     get :health, to: 'health#index'
     namespace :v1 do
-      # 後続でコントローラを実装
+      resources :items, only: [:index, :show]
     end
   end
 

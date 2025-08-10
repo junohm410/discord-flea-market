@@ -3,15 +3,5 @@
 class ApplicationResource
   include Alba::Resource
 
-  # lowerCamelCase に統一
-  key_transform :camel_lower
-
-  def self.pagination_meta(pagy_like)
-    {
-      total: pagy_like.total_count,
-      totalPages: pagy_like.total_pages,
-      currentPage: pagy_like.current_page,
-      per: pagy_like.limit_value
-    }
-  end
+  # NOTE: キー変換は当面明示属性名で対応（Albaのグローバル変換は後日再検討）
 end
