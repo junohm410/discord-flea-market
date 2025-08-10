@@ -1,6 +1,8 @@
-import ItemForm from "./_components/ItemForm";
+import ItemUpsertForm from "@/components/items/ItemUpsertForm";
 
-export default function NewItemPage() {
+const NewItemPage = () => {
   // TODO: 提出時はBFF経由でRails APIへPOST（CSRF/Cookie/JSON or multipart対応）
-  return <ItemForm />;
-}
+  return <ItemUpsertForm mode="create" />;
+};
+
+export default NewItemPage;

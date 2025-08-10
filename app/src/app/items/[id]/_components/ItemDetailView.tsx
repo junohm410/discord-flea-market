@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import styled from "styled-components";
-import ItemPrice from "@/components/ItemPrice";
-import ItemStatusLabel from "@/components/ItemStatusLabel";
+import ItemPrice from "@/components/items/ItemPrice";
+import ItemStatusLabel from "@/components/items/ItemStatusLabel";
 
 type Item = {
   id: number;
@@ -13,7 +14,7 @@ type Item = {
   imageUrl?: string;
 };
 
-export default function ItemDetailView({ item }: { item: Item }) {
+const ItemDetailView = ({ item }: { item: Item }) => {
   return (
     <Main>
       <Grid>
@@ -37,11 +38,15 @@ export default function ItemDetailView({ item }: { item: Item }) {
           <Desc>
             この商品はモックデータです。詳細情報は後続のAPI接続で拡張します。
           </Desc>
+          {/* TODO: 認可チェック：出品者本人のみ編集可能。非本人はこのボタンを表示しない or 無効化する */}
+          <Actions>
+            <EditLink href={`/items/${item.id}/edit`}>編集する</EditLink>
+          </Actions>
         </InfoSection>
       </Grid>
     </Main>
   );
-}
+};
 
 const Main = styled.main`
   padding: 24px;
@@ -81,3 +86,23 @@ const Desc = styled.p`
   color: #6b7280;
   margin: 0;
 `;
+
+const Actions = styled.div`
+  display: flex;
+  gap: 12px;
+`;
+
+const EditLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  width: fit-content;
+`;
+
+export default ItemDetailView;

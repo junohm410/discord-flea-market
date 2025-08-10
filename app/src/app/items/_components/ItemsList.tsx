@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ItemCard from "@/components/ItemCard";
+import ItemCard from "@/components/items/ItemCard";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -13,7 +13,7 @@ type Item = {
   imageUrl?: string;
 };
 
-export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
+const ItemsList = ({ initialItems }: { initialItems: Item[] }) => {
   const [items] = useState(initialItems);
   return (
     <Container>
@@ -28,7 +28,7 @@ export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
       </Grid>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   padding: 24px;
@@ -64,3 +64,5 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
 `;
+
+export default ItemsList;

@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 
-export default function Home() {
+const Home = () => {
   const railsOrigin = process.env.NEXT_PUBLIC_RAILS_ORIGIN;
 
   return (
@@ -65,7 +65,7 @@ export default function Home() {
       </Content>
     </Container>
   );
-}
+};
 
 const Container = styled.main`
   display: grid;
@@ -178,3 +178,5 @@ const Caption = styled.p`
   color: #4b5563; /* gray-600 */
   font-size: 12px;
 `;
+
+export default Home;
