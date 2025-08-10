@@ -13,12 +13,17 @@ type Item = {
   imageUrl?: string;
 };
 
-const ItemsList = ({ initialItems }: { initialItems: Item[] }) => {
+type ItemsListProps = {
+  initialItems: Item[];
+  title?: string;
+};
+
+const ItemsList = ({ initialItems, title }: ItemsListProps) => {
   const [items] = useState(initialItems);
   return (
     <Container>
       <Toolbar>
-        <Title>出品中の商品</Title>
+        <Title>{title ?? "出品中の商品"}</Title>
         <NewButton href="/items/new">商品を出品する</NewButton>
       </Toolbar>
       <Grid>
