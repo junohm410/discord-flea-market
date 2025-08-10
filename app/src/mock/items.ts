@@ -3,7 +3,7 @@ export type MockItem = {
   name: string;
   price: number;
   listed: boolean;
-  imageUrl?: string;
+  imageUrls?: string[];
   deadline?: string; // ISO8601
   seller?: { name: string; avatarUrl?: string };
 };
@@ -14,7 +14,8 @@ export const mockItems: MockItem[] = [
     name: "技術書セット",
     price: 1200,
     listed: true,
-    imageUrl: "/images/mock/items/1.jpg",
+    // TODO: モック画像使用中。API接続後は実画像URLに置換する
+    imageUrls: ["/images/mock/items/1.jpg", "/images/mock/items/2.jpg"],
     deadline: "2025-08-31T23:59:59Z",
     seller: { name: "Alice", avatarUrl: "/favicon.ico" },
   },
@@ -23,7 +24,8 @@ export const mockItems: MockItem[] = [
     name: "メカニカルキーボード",
     price: 4500,
     listed: false,
-    imageUrl: "/images/mock/items/2.jpg",
+    // TODO: モック画像使用中。API接続後は実画像URLに置換する
+    imageUrls: ["/images/mock/items/2.jpg"],
     deadline: "2025-08-15T23:59:59Z",
     seller: { name: "Bob", avatarUrl: "/favicon.ico" },
   },
@@ -32,7 +34,8 @@ export const mockItems: MockItem[] = [
     name: "ゲーミングマウス",
     price: 2000,
     listed: true,
-    imageUrl: "/images/mock/items/3.jpg",
+    // TODO: モック画像使用中。API接続後は実画像URLに置換する
+    imageUrls: ["/images/mock/items/3.jpg"],
     deadline: "2025-09-10T23:59:59Z",
     seller: { name: "Carol", avatarUrl: "/favicon.ico" },
   },

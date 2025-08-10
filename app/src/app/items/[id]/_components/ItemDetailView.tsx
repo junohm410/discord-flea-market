@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import ItemPrice from "@/components/items/ItemPrice";
@@ -11,13 +10,14 @@ import ItemSeller from "@/components/items/ItemSeller";
 import { requestedItemIds } from "@/mock/requests";
 import ItemRequestToggle from "./ItemRequestToggle";
 import ItemDeleteButton from "./ItemDeleteButton";
+import ItemCarousel from "@/components/items/ItemCarousel";
 
 type Item = {
   id: number;
   name: string;
   price: number;
   listed: boolean;
-  imageUrl?: string;
+  imageUrls?: string[];
   deadline?: string;
   seller?: { name: string; avatarUrl?: string };
 };
@@ -28,15 +28,8 @@ const ItemDetailView = ({ item }: { item: Item }) => {
       <Grid>
         <LeftCol>
           <ImageWrap>
-            {item.imageUrl && (
-              <Image
-                src={item.imageUrl}
-                alt=""
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 600px, 720px"
-                style={{ objectFit: "cover" }}
-              />
-            )}
+            {/* TODO: モック画像複数対応。API接続後も配列で受領する */}
+            <ItemCarousel imageUrls={item.imageUrls ?? []} />
           </ImageWrap>
           <InfoSection>
             <Title>{item.name}</Title>

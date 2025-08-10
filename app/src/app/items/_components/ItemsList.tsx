@@ -11,7 +11,7 @@ type Item = {
   name: string;
   price: number;
   listed: boolean;
-  imageUrl?: string;
+  imageUrls?: string[];
 };
 
 type ItemsListProps = {

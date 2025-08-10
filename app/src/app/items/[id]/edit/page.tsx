@@ -21,7 +21,8 @@ const ItemEditPage = async ({
     // TODO: モック拡張時に型へ追加する
     description: undefined,
     deadline: undefined,
-    imageUrl: item.imageUrl,
+    // TODO: 画像の複数対応時はフォーム側の型を配列に拡張
+    imageUrl: item.imageUrls?.[0],
   };
 
   return <ItemUpsertForm mode="edit" initial={initial} />;

@@ -9,16 +9,17 @@ type Item = {
   name: string;
   price: number;
   listed: boolean;
-  imageUrl?: string;
+  imageUrls?: string[];
 };
 
-export default function ItemCard({ item }: { item: Item }) {
+const ItemCard = ({ item }: { item: Item }) => {
+  const thumb = item.imageUrls?.[0];
   return (
     <Card>
       <Thumb>
-        {item.imageUrl ? (
+        {thumb ? (
           <Image
-            src={item.imageUrl}
+            src={thumb}
             alt=""
             fill
             sizes="(max-width: 768px) 100vw, 240px"
@@ -41,7 +42,7 @@ export default function ItemCard({ item }: { item: Item }) {
       </Body>
     </Card>
   );
-}
+};
 
 const Card = styled.article`
   display: grid;
@@ -96,3 +97,5 @@ const Status = styled.span<{ $listed: boolean }>`
   color: ${({ $listed }) => ($listed ? "#065f46" : "#92400e")};
   background: ${({ $listed }) => ($listed ? "#d1fae5" : "#fef3c7")};
 `;
+
+export default ItemCard;
