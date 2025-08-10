@@ -21,8 +21,10 @@ RSpec.describe 'Api::V1::Comments のAPI', type: :request do
   end
 
   describe 'POST /api/v1/items/:item_id/comments（作成）' do
-    it 'コメントを作成し、201で返す' do
-      post "/api/v1/items/#{item.id}/comments", params: { comment: { content: 'こんにちは' } }
+    it 'コメントを作成し、201で返す（DBに作成される）' do
+      expect do
+        post "/api/v1/items/#{item.id}/comments", params: { comment: { content: 'こんにちは' } }
+      end.to change(Comment, :count).by(1)
       expect(response).to have_http_status(:created)
       json = JSON.parse(response.body)
       expect(json).to include('id', 'content', 'author')
@@ -36,12 +38,13 @@ RSpec.describe 'Api::V1::Comments のAPI', type: :request do
   end
 
   describe 'PATCH /api/v1/items/:item_id/comments/:id（更新）' do
-    it '自分のコメントを更新できる' do
+    it '自分のコメントを更新できる（DB更新される）' do
       comment = create(:comment, item:, user:, content: 'old')
       patch "/api/v1/items/#{item.id}/comments/#{comment.id}", params: { comment: { content: 'new' } }
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
       expect(json['content']).to eq 'new'
+      expect(comment.reload.content).to eq 'new'
     end
 
     it '他人のコメントは更新できない（404）' do
@@ -52,9 +55,11 @@ RSpec.describe 'Api::V1::Comments のAPI', type: :request do
   end
 
   describe 'DELETE /api/v1/items/:item_id/comments/:id（削除）' do
-    it '自分のコメントを削除できる（204）' do
+    it '自分のコメントを削除できる（204、DBから削除）' do
       comment = create(:comment, item:, user:, content: 'bye')
-      delete "/api/v1/items/#{item.id}/comments/#{comment.id}"
+      expect do
+        delete "/api/v1/items/#{item.id}/comments/#{comment.id}"
+      end.to change(Comment, :count).by(-1)
       expect(response).to have_http_status(:no_content)
       expect(Comment.where(id: comment.id)).to be_empty
     end

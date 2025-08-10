@@ -64,7 +64,9 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
     end
 
     it '認証済みなら作成でき、201で返る' do
-      post '/api/v1/items', params: valid_params
+      expect do
+        post '/api/v1/items', params: valid_params
+      end.to change(Item, :count).by(1)
       expect(response).to have_http_status(:created)
       json = JSON.parse(response.body)
       expect(json['title']).to eq '新規アイテム'
@@ -78,6 +80,7 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
       expect(json['description']).to eq '更新後'
+      expect(item.reload.description).to eq '更新後'
     end
 
     it '他人のアイテムは更新できない（404）' do
@@ -89,9 +92,11 @@ RSpec.describe 'Api::V1::Items のAPI', type: :request do
   end
 
   describe 'DELETE /api/v1/items/:id（削除）' do
-    it '所有者なら削除でき、204で返る' do
+    it '所有者なら削除でき、204で返る（DBから削除）' do
       item = create(:item, user:, status: :listed)
-      delete "/api/v1/items/#{item.id}"
+      expect do
+        delete "/api/v1/items/#{item.id}"
+      end.to change(Item, :count).by(-1)
       expect(response).to have_http_status(:no_content)
       expect(Item.where(id: item.id)).to be_empty
     end
