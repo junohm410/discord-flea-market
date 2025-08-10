@@ -1,0 +1,8 @@
+/ 出品者情報
+.flex.items-center.gap-4
+  = image_tag item.user.avatar_url,
+    class: 'w-12 h-12 rounded-full ring-2 ring-gray-200 flex-shrink-0',
+    alt: "#{item.user.name}のアバター"
+  div
+    .text-sm.text-gray-500 出品者
+    .font-medium.text-gray-900 = item.user.name

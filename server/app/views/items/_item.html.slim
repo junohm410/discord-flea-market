@@ -1,0 +1,42 @@
+div id="#{dom_id item}"
+  / 商品名と説明
+  .space-y-6
+    h1.text-2xl.lg:text-3xl.font-bold.text-gray-900.leading-tight
+      = item.name
+
+    .text-gray-700.space-y-4
+      p.flex.items-start.gap-2
+        span.text-gray-500 aria-hidden="true" 📦
+        strong 商品の説明
+      .prose.prose-gray.max-w-none
+        = simple_format item_description_display(item), class: 'text-gray-700'
+
+    / 商品詳細情報グリッド
+    .grid.grid-cols-1.md:grid-cols-2.gap-4.pt-4.border-t.border-gray-200
+      div
+        p.item-label
+          span aria-hidden="true" 🚚
+          span 送料の負担
+        p.mt-1.item-value.font-medium
+          = shipping_cost_display(item)
+
+      div
+        p.item-label
+          span aria-hidden="true" 💳
+          span 希望する支払方法
+        p.mt-1.item-value.font-medium
+          = item.payment_method
+
+      div
+        p.item-label
+          span aria-hidden="true" 📤
+          span 出品日
+        p.mt-1.item-value
+          = l item.created_at.to_date, format: :long
+
+      div
+        p.item-label
+          span aria-hidden="true" 🛠
+          span 最終更新
+        p.mt-1.item-value
+          = l item.updated_at.to_date, format: :long

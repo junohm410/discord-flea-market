@@ -1,0 +1,25 @@
+.w-full
+  - content_for :title, @item.name
+
+  / メインコンテンツ - 2カラムレイアウト
+  .grid.grid-cols-1.lg:grid-cols-3.gap-6.lg:gap-8
+
+    / 左カラム - 商品画像と詳細情報
+    .lg:col-span-2.space-y-6
+      / 商品画像セクション
+      .item-card
+        = render 'item_carousel', item: @item
+
+      / 商品詳細セクション
+      .item-card-padded
+        = render @item
+
+      / コメントセクション
+      .item-card-padded
+        = render 'comments/comments', item: @item
+
+    = render 'item_sidebar', item: @item
+
+  / フッター
+  .mt-8.text-center
+    = link_to '← 商品一覧に戻る', items_path, class: 'btn-secondary inline-flex items-center gap-2'

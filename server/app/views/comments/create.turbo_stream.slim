@@ -1,0 +1,5 @@
+= turbo_stream.append 'comments', @comment
+= turbo_stream.update 'comments_count', "(#{@comment.item.comments.size})"
+= turbo_stream.replace 'new_comment'
+  = render 'comments/form', comment: @comment.item.comments.build
+= turbo_stream.update 'flash', partial: 'layouts/flash'
