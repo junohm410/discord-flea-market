@@ -1,5 +1,5 @@
 // RSC: Items 一覧（当面は固定 JSON）
-import ItemsList from "./ItemsList";
+import ItemsList from "./_components/ItemsList";
 // TODO: Rails API 接続後はモックを削除し、`cookies()`付きのAPIフェッチ or BFF経由に置換する
 import { mockItems } from "@/mock/items";
 
