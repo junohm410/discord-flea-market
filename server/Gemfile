@@ -91,3 +91,4 @@ group :test do
 end
 
 gem 'alba', '~> 3.8'
+gem 'rack-cors'
