@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     get :health, to: 'health#index'
     namespace :v1 do
+      resource :me, only: [:show], controller: 'me'
       resources :items, only: [:index, :show, :create, :update, :destroy] do
         resources :comments, only: [:index, :create, :update, :destroy]
         resources :purchase_requests, only: [:create, :destroy]
