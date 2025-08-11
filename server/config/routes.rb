@@ -1,4 +1,20 @@
 Rails.application.routes.draw do
+  namespace :api, defaults: { format: :json } do
+    get :health, to: 'health#index'
+    namespace :v1 do
+      resource :me, only: [:show, :destroy], controller: 'me'
+      delete 'session', to: 'sessions#destroy'
+      resources :items, only: [:index, :show, :create, :update, :destroy] do
+        resources :comments, only: [:index, :create, :update, :destroy]
+        resources :purchase_requests, only: [:create, :destroy]
+      end
+      namespace :me do
+        resources :listed_items, only: [:index]
+        resources :requested_items, only: [:index]
+      end
+    end
+  end
+
   resources :items do
     resources :purchase_requests, only: [:create, :destroy]
     resources :comments, only: [:new, :create, :edit, :update, :destroy]

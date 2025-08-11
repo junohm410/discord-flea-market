@@ -29,7 +29,7 @@ class Item < ApplicationRecord
   scope :editable, -> { listed.where('deadline >= ?', Time.zone.today).or(unpublished) }
   scope :closed_yesterday, -> { listed.where('deadline < ?', Time.zone.today) }
 
-  paginates_per 10
+  paginates_per 12
 
   def select_buyer!
     if purchase_requests.exists?

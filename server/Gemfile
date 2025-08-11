@@ -89,3 +89,6 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
 end
+
+gem 'alba', '~> 3.8'
+gem 'rack-cors'

@@ -14,3 +14,6 @@ RSpec/ExampleLength:
 
 RSpec/DescribedClass:
   Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
